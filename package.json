@@ -2,7 +2,6 @@
     "name": "yter2",
     "version": "1.0.0",
     "private": true,
-    "type": "module",
     "scripts": {
         "dev": "nuxt-ts",
         "build": "nuxt-ts build",
