@@ -1,0 +1,53 @@
+{
+    "name": "yter2",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt-ts",
+        "build": "nuxt-ts build",
+        "start": "nuxt-ts start",
+        "generate": "nuxt-ts generate",
+        "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+        "lint": "yarn lint:js"
+    },
+    "dependencies": {
+        "@mdi/font": "^5.8.55",
+        "@nuxt/typescript-runtime": "^2.0.0",
+        "@nuxtjs/axios": "^5.12.2",
+        "@nuxtjs/proxy": "^2.1.0",
+        "@types/video.js": "^7.3.11",
+        "core-js": "^3.6.5",
+        "dashjs": "^3.2.0",
+        "date-fns": "^2.16.1",
+        "express": "^4.17.1",
+        "nuxt": "^2.14.6",
+        "plyr": "^3.6.3",
+        "typeface-roboto": "^1.1.13",
+        "vue-lazyload": "^1.3.3",
+        "youtube-suggest": "^1.1.0",
+        "yt-channel-info": "SlagHoedje/yt-channel-info",
+        "yt-dash-manifest-generator": "^2.0.0",
+        "ytdl-core": "^4.2.1",
+        "ytsr": "^3.2.1"
+    },
+    "devDependencies": {
+        "@nuxt/types": "^2.14.6",
+        "@nuxt/typescript-build": "^2.0.3",
+        "@nuxtjs/eslint-config": "^3.1.0",
+        "@nuxtjs/eslint-config-typescript": "^3.0.0",
+        "@nuxtjs/eslint-module": "^2.0.0",
+        "@nuxtjs/style-resources": "^1.0.0",
+        "@nuxtjs/tailwindcss": "^3.4.2",
+        "autoprefixer": "9",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.10.0",
+        "eslint-config-prettier": "^6.12.0",
+        "eslint-plugin-nuxt": "^1.0.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "postcss": "7",
+        "prettier": "^2.1.2",
+        "sass": "^1.30.0",
+        "sass-loader": "^10.1.0",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    }
+}
