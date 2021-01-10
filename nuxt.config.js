@@ -22,7 +22,12 @@ export default {
 
     buildModules: ['@nuxt/typescript-build', '@nuxtjs/tailwindcss'],
 
-    modules: ['@nuxtjs/axios', '@nuxtjs/proxy', '@nuxtjs/style-resources'],
+    modules: [
+        '@nuxtjs/axios',
+        '@nuxtjs/proxy',
+        '@nuxtjs/style-resources',
+        '@nuxtjs/robots',
+    ],
 
     serverMiddleware: {
         '/api': '~/serverMiddleware/api.ts',
@@ -46,6 +51,11 @@ export default {
             target: 'https://invidious.tube/api/manifest/dash/id',
             pathRewrite: { '^/api/v1/dash': '' },
         },
+    },
+
+    robots: {
+        UserAgent: '*',
+        Disallow: '/',
     },
 
     build: {},
