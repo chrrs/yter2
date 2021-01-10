@@ -8,6 +8,7 @@ export interface ApiVideoResponse {
 
 export interface ApiSearchResponse {
     results: SearchResult[];
+    continuation: string;
 }
 
 export interface ApiChannelVideosResponse {

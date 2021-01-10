@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import ytdl from 'ytdl-core';
 import { formatDistance } from 'date-fns';
 import suggest from 'youtube-suggest';
@@ -106,7 +106,7 @@ app.get('/search/suggest', async (req, res) => {
 });
 
 app.get('/search', async (req, res) => {
-    const info = await ytsr(req.query.q as string);
+    const info = await ytsr(req.query.q as string, { pages: 1 });
 
     res.json({
         results: info.items.map((i) => {
@@ -160,6 +160,7 @@ app.get('/search', async (req, res) => {
                 }
             }
         }),
+        continuation: info.continuation,
     } as ApiSearchResponse);
 });
 
@@ -214,13 +215,13 @@ function transformYtsrVideo(video: ytsr.Video): Video {
 
     if (parts === null) {
         lengthSeconds = 0;
-    } else if (parts[2] !== undefined) {
+    } else if (parts[3]) {
         lengthSeconds =
-            parseInt(parts[0]) * 3600 +
-            parseInt(parts[1]) * 60 +
-            parseInt(parts[2]);
+            parseInt(parts[1]) * 3600 +
+            parseInt(parts[2]) * 60 +
+            parseInt(parts[3]);
     } else {
-        lengthSeconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        lengthSeconds = parseInt(parts[1]) * 60 + parseInt(parts[2]);
     }
 
     const ret = {
