@@ -1,5 +1,10 @@
 <template>
-    <div class="container px-16 mx-auto mt-4">
+    <div
+        v-infinite-scroll="loadMore"
+        class="container px-16 mx-auto mt-4"
+        infinite-scroll-disabled="busy"
+        infinite-scroll-distance="10"
+    >
         <div v-if="$fetchState.pending" class="flex flex-col gap-4">
             <SkeletonSearchResult />
             <SkeletonSearchResult class="opacity-75" />
@@ -23,10 +28,14 @@ export default Vue.extend({
         )) as ApiSearchResponse;
 
         this.results = result.results;
+        this.continuation = result.continuation;
+        this.busy = false;
     },
     data() {
         return {
-            results: null as SearchResult[] | null,
+            results: [] as SearchResult[],
+            continuation: '',
+            busy: true,
         };
     },
     validate({ query }) {
@@ -35,6 +44,22 @@ export default Vue.extend({
     watch: {
         '$route.query.search_query'() {
             this.$fetch();
+        },
+    },
+    methods: {
+        async loadMore() {
+            this.busy = true;
+
+            const result = (await this.$axios.$get(
+                `/api/v1/search?q=${
+                    this.$route.query.search_query
+                }&continuation=${encodeURIComponent(this.continuation)}`
+            )) as ApiSearchResponse;
+
+            this.results = this.results.concat(result.results);
+            this.continuation = result.continuation;
+
+            setTimeout(() => (this.busy = false), 100);
         },
     },
     fetchOnServer: false,

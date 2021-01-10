@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import express from 'express';
 import ytdl from 'ytdl-core';
 import { formatDistance } from 'date-fns';
 import suggest from 'youtube-suggest';
@@ -106,7 +106,16 @@ app.get('/search/suggest', async (req, res) => {
 });
 
 app.get('/search', async (req, res) => {
-    const info = await ytsr(req.query.q as string, { pages: 1 });
+    let info;
+    if (req.query.continuation) {
+        const continuation = JSON.parse(
+            Buffer.from(req.query.continuation as string, 'base64').toString()
+        );
+        continuation[3].limit = Infinity;
+        info = await ytsr.continueReq(continuation);
+    } else {
+        info = await ytsr(req.query.q as string, { pages: 1 });
+    }
 
     res.json({
         results: info.items.map((i) => {
@@ -160,7 +169,9 @@ app.get('/search', async (req, res) => {
                 }
             }
         }),
-        continuation: info.continuation,
+        continuation: Buffer.from(JSON.stringify(info.continuation)).toString(
+            'base64'
+        ),
     } as ApiSearchResponse);
 });
 

@@ -17,7 +17,7 @@ export default {
     },
 
     css: ['typeface-roboto', '@mdi/font/css/materialdesignicons.css'],
-    plugins: ['~/plugins/vue-lazyload.ts'],
+    plugins: ['~/plugins/vue-lazyload.ts', '~/plugins/vue-infinite-scroll.ts'],
     components: true,
 
     buildModules: ['@nuxt/typescript-build', '@nuxtjs/tailwindcss'],

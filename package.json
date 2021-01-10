@@ -27,6 +27,7 @@
         "plyr": "^3.6.3",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat",
         "typeface-roboto": "^1.1.13",
+        "vue-infinite-scroll": "^2.0.2",
         "vue-lazyload": "^1.3.3",
         "youtube-suggest": "^1.1.0",
         "yt-channel-info": "SlagHoedje/yt-channel-info",
