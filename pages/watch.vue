@@ -13,7 +13,7 @@
                 :storyboards="`/api/v1/storyboards/${video.id}?width=179&height=90`"
             />
             <div class="divide-y divide-gray-300">
-                <div class="py-4">
+                <div class="py-4 relative">
                     <!--<div class="text-xs text-indigo-500">#MinecraftManhunt</div>-->
                     <p class="text-lg text-black">
                         <template v-if="$fetchState.pending">
@@ -35,6 +35,39 @@
                             }}
                         </template>
                     </p>
+                    <div
+                        v-if="!$fetchState.pending"
+                        class="absolute right-2 bottom-0 flex gap-6 uppercase font-medium text-gray-600"
+                    >
+                        <div class="h-full flex flex-col">
+                            <p class="py-2 flex-grow place-self-center">
+                                <span
+                                    class="mdi mdi-thumb-up text-gray-500"
+                                ></span>
+                                {{ video.likes.toLocaleString('en-US') }}
+                                <span
+                                    class="mdi mdi-thumb-down ml-2 text-gray-500"
+                                ></span>
+                                {{ video.dislikes.toLocaleString('en-US') }}
+                            </p>
+                            <div class="relative h-1 w-full bg-gray-300">
+                                <div
+                                    class="bg-gray-600 h-full"
+                                    :style="`width: ${likeRatio * 100}%`"
+                                ></div>
+                            </div>
+                        </div>
+                        <a
+                            class="py-2"
+                            :href="`https://youtube.com/watch?v=${video.id}`"
+                            target="_blank"
+                        >
+                            <span
+                                class="mdi mdi-open-in-new mr-1 text-gray-500"
+                            ></span>
+                            Youtube
+                        </a>
+                    </div>
                 </div>
                 <div class="flex py-4 gap-4">
                     <div
@@ -145,6 +178,18 @@ export default Vue.extend({
     },
     validate({ query }) {
         return !!query.v && /^([A-Za-z0-9\-_]){11}$/.test(query.v as string);
+    },
+    computed: {
+        likeRatio() {
+            if (this.video) {
+                return (
+                    // @ts-ignore
+                    this.video.likes / (this.video.likes + this.video.dislikes)
+                );
+            } else {
+                return 1.0;
+            }
+        },
     },
     watch: {
         '$route.query.v'() {

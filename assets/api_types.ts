@@ -49,6 +49,8 @@ export interface Video {
     live: boolean;
     upcoming: boolean;
     lengthSeconds: number;
+    likes?: number;
+    dislikes?: number;
     badges?: VideoBadge[];
     author?: Channel;
     thumbnails: Image[];

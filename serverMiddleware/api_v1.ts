@@ -4,7 +4,6 @@ import { formatDistance } from 'date-fns';
 import suggest from 'youtube-suggest';
 import ytsr from 'ytsr';
 import ytChannelInfo from 'yt-channel-info';
-import { generate_dash_file_from_formats } from 'yt-dash-manifest-generator';
 import {
     ApiChannelVideosResponse,
     ApiSearchResponse,
@@ -48,6 +47,8 @@ app.get('/video/:id', async (req, res) => {
                 ' ago',
             live: details.isLiveContent,
             lengthSeconds: parseInt(details.lengthSeconds),
+            likes: details.likes,
+            dislikes: details.dislikes,
             author: {
                 id: author.id,
                 name: author.name,
