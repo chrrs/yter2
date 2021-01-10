@@ -56,13 +56,17 @@
                                 <template v-if="$fetchState.pending">
                                     <SkeletonLine width="150" />
                                 </template>
-                                <template v-else>
+                                <NuxtLink
+                                    v-else
+                                    :to="`/channel/${video.author.id}`"
+                                    class="hover:underline"
+                                >
                                     {{ video.author.name }}
                                     <span
                                         v-if="video.author.verified"
                                         class="mdi mdi-check text-gray-600"
                                     ></span>
-                                </template>
+                                </NuxtLink>
                             </p>
                             <p class="text-sm text-gray-600 leading-tight">
                                 <template v-if="$fetchState.pending">

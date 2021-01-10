@@ -10201,10 +10201,10 @@ ytdl-core@^3.2.2:
     miniget "^2.0.1"
     sax "^1.1.3"
 
-ytdl-core@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.2.1.tgz#afcc1577a2a35701a5e1369f2ad3b0d1a7d2419d"
-  integrity sha512-7zAoJiWpaBGgiAUCQuvKBuWom7tmSCV0A70gRdrPxR96yQoJOrCZkW6Wg1CofvPtAeQVWTVWThC8bXRsE+SBeA==
+ytdl-core@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.4.2.tgz#8bfa80477797a2747ae5b09273548b5e0c6b115e"
+  integrity sha512-T6eXIhDoDPqmxFKPu4R2LG+X/uWYh1wy/cfAf+OwJNHx6+cAYXbdyZ8j2el9yy1G3nDP1Dd4YN5BGRATJdQlFg==
   dependencies:
     m3u8stream "^0.8.3"
     miniget "^4.0.0"

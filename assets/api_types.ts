@@ -87,9 +87,10 @@ export function bestFittingImage(
 
     return (
         images
+            .slice()
             .filter((t) => width <= t.width && height <= t.height)
             .sort((a, b) => a.width - b.width)[0] ||
-        images.sort((a, b) => b.width - a.width)[0]
+        images.slice().sort((a, b) => b.width - a.width)[0]
     );
 }
 
