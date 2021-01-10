@@ -26,13 +26,16 @@
                             <SkeletonLine />
                         </template>
                         <template v-else>
-                            {{ video.views.toLocaleString('en-US') }} views •
-                            {{
-                                format(
-                                    new Date(video.publishDate),
-                                    'MMM d, yyyy'
-                                )
-                            }}
+                            {{ video.views.toLocaleString('en-US') }} views
+                            <span class="hidden xl:inline">
+                                •
+                                {{
+                                    format(
+                                        new Date(video.publishDate),
+                                        'MMM d, yyyy'
+                                    )
+                                }}
+                            </span>
                         </template>
                     </p>
                     <div
