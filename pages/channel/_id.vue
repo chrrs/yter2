@@ -84,10 +84,8 @@ import Vue from 'vue';
 import { bestFittingImage, Channel, formatNumber } from '~/assets/api_types';
 
 export default Vue.extend({
-    async fetch() {
-        this.channel = (await this.$axios.$get(
-            `/api/v1/channel/${this.$route.params.id}`
-        )) as Channel;
+    validate({ params }) {
+        return /[a-zA-Z0-9-]+/.test(params.id);
     },
     data() {
         return {
@@ -96,8 +94,10 @@ export default Vue.extend({
             currentPage: 'Videos',
         };
     },
-    validate({ params }) {
-        return /[a-zA-Z0-9-]+/.test(params.id);
+    async fetch() {
+        this.channel = (await this.$axios.$get(
+            `/api/v1/channel/${this.$route.params.id}`
+        )) as Channel;
     },
     methods: {
         formatNumber,

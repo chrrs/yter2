@@ -9,7 +9,7 @@
             :style="`height: ${20 * (9 / 16)}rem`"
         >
             <img
-                class="w-full h-full max-w-none object-cover"
+                class="w-full h-full max-w-none object-cover bg-gray-300"
                 :data-src="bestFittingImage(video.thumbnails, 320 * 2).url"
                 alt=""
             />

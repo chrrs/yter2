@@ -1,5 +1,10 @@
 <template>
-    <div class="container px-4 lg:px-16 mx-auto pt-4">
+    <div
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="busy"
+        infinite-scroll-distance="10"
+        class="container px-4 lg:px-16 mx-auto pt-4"
+    >
         <div
             v-if="!$fetchState.pending"
             class="flex gap-x-1 gap-y-8 flex-row flex-wrap"
@@ -17,7 +22,7 @@
                     style="padding-top: 56.25%"
                 >
                     <img
-                        class="w-full h-full object-cover absolute top-0 left-0"
+                        class="w-full h-full object-cover absolute top-0 left-0 bg-gray-300"
                         :data-src="
                             bestFittingImage(video.thumbnails, 200 * 2).url
                         "
@@ -45,6 +50,14 @@
                 </p>
             </NuxtLink>
         </div>
+        <div
+            v-if="continuation && continuation.length !== 0"
+            class="flex items-center justify-center py-4"
+        >
+            <span
+                class="mdi mdi-loading mdi-spin text-5xl text-gray-500"
+            ></span>
+        </div>
     </div>
 </template>
 
@@ -66,22 +79,42 @@ export default Vue.extend({
             required: true,
         },
     },
+    data() {
+        return {
+            videos: [] as Video[],
+            continuation: '',
+            busy: true,
+        };
+    },
     async fetch() {
         const response = (await this.$axios.$get(
             `/api/v1/channel/${this.$route.params.id}/videos`
         )) as ApiChannelVideosResponse;
 
         this.videos = response.videos;
+        this.continuation = response.continuation;
     },
-    data() {
-        return {
-            videos: [] as Video[],
-        };
+    mounted() {
+        setTimeout(() => (this.busy = false), 100);
     },
     methods: {
         bestFittingImage,
         videoSubtitle,
         formatDuration,
+        async loadMore() {
+            if (!this.continuation || this.continuation.length === 0) return;
+
+            this.busy = true;
+
+            const response = (await this.$axios.$get(
+                `/api/v1/channel/${this.$route.params.id}/videos?continuation=${this.continuation}`
+            )) as ApiChannelVideosResponse;
+
+            this.videos = this.videos.concat(response.videos);
+            this.continuation = response.continuation;
+
+            setTimeout(() => (this.busy = false), 100);
+        },
     },
     fetchOnServer: false,
 });

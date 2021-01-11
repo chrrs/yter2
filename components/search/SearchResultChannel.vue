@@ -5,7 +5,7 @@
             class="relative flex-none w-80"
         >
             <img
-                class="w-32 h-32 rounded-full m-auto"
+                class="w-32 h-32 rounded-full m-auto bg-gray-300"
                 :data-src="bestFittingImage(channel.avatars, 128 * 2).url"
                 alt=""
             />

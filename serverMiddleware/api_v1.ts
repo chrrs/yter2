@@ -190,7 +190,14 @@ app.get('/channel/:id', async (req, res) => {
 });
 
 app.get('/channel/:id/videos', async (req, res) => {
-    const info = await ytChannelInfo.getChannelVideos(req.params.id);
+    let info;
+    if (req.query.continuation) {
+        info = await ytChannelInfo.getChannelVideosMore(
+            req.query.continuation as string
+        );
+    } else {
+        info = await ytChannelInfo.getChannelVideos(req.params.id);
+    }
 
     res.json({
         videos: info.items.map((v) => {

@@ -47,4 +47,8 @@ declare module 'yt-channel-info' {
         channelId: string,
         sortBy?: string
     ): Promise<ChannelVideos>;
+
+    export function getChannelVideosMore(
+        continuation: string
+    ): Promise<ChannelVideos>;
 }

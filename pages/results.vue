@@ -13,6 +13,11 @@
         </div>
         <div v-else>
             <SearchResults :results="results" />
+            <div class="flex items-center justify-center py-4">
+                <span
+                    class="mdi mdi-loading mdi-spin text-5xl text-gray-500"
+                ></span>
+            </div>
         </div>
     </div>
 </template>
@@ -22,14 +27,8 @@ import Vue from 'vue';
 import { ApiSearchResponse, SearchResult } from '~/assets/api_types';
 
 export default Vue.extend({
-    async fetch() {
-        const result = (await this.$axios.$get(
-            `/api/v1/search?q=${this.$route.query.search_query}`
-        )) as ApiSearchResponse;
-
-        this.results = result.results;
-        this.continuation = result.continuation;
-        this.busy = false;
+    validate({ query }) {
+        return !!query.search_query;
     },
     data() {
         return {
@@ -38,13 +37,21 @@ export default Vue.extend({
             busy: true,
         };
     },
-    validate({ query }) {
-        return !!query.search_query;
+    async fetch() {
+        const result = (await this.$axios.$get(
+            `/api/v1/search?q=${this.$route.query.search_query}`
+        )) as ApiSearchResponse;
+
+        this.results = result.results;
+        this.continuation = result.continuation;
     },
     watch: {
         '$route.query.search_query'() {
             this.$fetch();
         },
+    },
+    mounted() {
+        setTimeout(() => (this.busy = false), 100);
     },
     methods: {
         async loadMore() {
