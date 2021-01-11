@@ -1,7 +1,7 @@
 <template>
     <div
         v-infinite-scroll="loadMore"
-        class="container px-16 mx-auto mt-4"
+        class="container px-4 lg:px-16 mx-auto mt-4"
         infinite-scroll-disabled="busy"
         infinite-scroll-distance="10"
     >

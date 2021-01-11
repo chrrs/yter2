@@ -11,7 +11,7 @@
                 :src="bestFittingImage(channel.banners, 99999).url"
                 alt=""
             />
-            <div class="container px-16 mx-auto">
+            <div class="container px-4 lg:px-16 mx-auto">
                 <div class="flex mt-4 mb-2 gap-6">
                     <div
                         v-if="$fetchState.pending"

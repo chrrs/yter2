@@ -1,5 +1,5 @@
 <template>
-    <div class="container px-16 mx-auto pt-4">
+    <div class="container px-4 lg:px-16 mx-auto pt-4">
         <div
             v-if="!$fetchState.pending"
             class="flex gap-x-1 gap-y-8 flex-row flex-wrap"

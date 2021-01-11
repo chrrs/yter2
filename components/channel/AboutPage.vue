@@ -1,5 +1,5 @@
 <template>
-    <div class="container px-16 mx-auto pt-8">
+    <div class="container px-4 lg:px-16 mx-auto pt-8">
         <p>Description</p>
         <p class="whitespace-pre-line text-sm border-b border-gray-300 pb-8">
             {{ channel.description }}

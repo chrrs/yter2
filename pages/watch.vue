@@ -1,5 +1,5 @@
 <template>
-    <div class="container px-16 mx-auto mt-4 flex gap-4">
+    <div class="container px-4 lg:px-16 mx-auto mt-4 flex gap-4">
         <div class="flex-1 flex-grow">
             <div
                 v-if="$fetchState.pending"
@@ -132,7 +132,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 flex-initial w-96">
+        <div class="hidden lg:flex flex-col gap-2 flex-initial w-96">
             <template v-if="$fetchState.pending">
                 <SkeletonRecommendedVideo />
                 <SkeletonRecommendedVideo class="opacity-80" />
