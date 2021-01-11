@@ -23,6 +23,16 @@
                         "
                         alt=""
                     />
+                    <div
+                        v-if="!video.live"
+                        class="absolute bottom-1 right-1 bg-black bg-opacity-60 text-white text-xs px-1 font-semibold"
+                    >
+                        {{
+                            video.upcoming
+                                ? 'PREMIERE'
+                                : formatDuration(video.lengthSeconds)
+                        }}
+                    </div>
                 </div>
                 <p class="text-sm font-medium mt-2">{{ video.title }}</p>
                 <p class="text-sm text-gray-600 mt-2">
@@ -45,6 +55,7 @@ import {
     bestFittingImage,
     Video,
     videoSubtitle,
+    formatDuration,
 } from '~/assets/api_types';
 
 export default Vue.extend({
@@ -70,6 +81,7 @@ export default Vue.extend({
     methods: {
         bestFittingImage,
         videoSubtitle,
+        formatDuration,
     },
     fetchOnServer: false,
 });
