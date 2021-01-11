@@ -43,7 +43,7 @@
                         class="absolute right-2 bottom-0 flex gap-6 uppercase font-medium text-gray-600"
                     >
                         <div class="h-full flex flex-col">
-                            <p class="py-2 flex-grow place-self-center">
+                            <p class="py-2 px-1 flex-grow place-self-center">
                                 <span
                                     class="mdi mdi-thumb-up text-gray-500"
                                 ></span>
