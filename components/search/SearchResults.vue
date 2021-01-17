@@ -17,6 +17,11 @@
                 :title="result.shelf.title"
                 :videos="result.shelf.videos"
             />
+            <SearchResultPlaylist
+                v-else-if="result.type === 'playlist'"
+                :key="index"
+                :playlist="result.playlist"
+            />
         </template>
     </div>
 </template>

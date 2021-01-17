@@ -28,7 +28,7 @@ function reverseFormatNumber(n: string): number {
 
 app.get('/video/:id', async (req, res) => {
     const info = await ytdl.getInfo(
-        `http://www.youtube.com/watch?v=${req.params.id}`
+        `http://www.youtube.com/watch?v=${req.params.id}`,
     );
 
     const details = info.videoDetails;
@@ -70,11 +70,11 @@ app.get('/video/:id', async (req, res) => {
                 lengthSeconds: v.length_seconds,
                 badges: v.isLive
                     ? [
-                          {
-                              type: 'live',
-                              text: 'LIVE NOW',
-                          },
-                      ]
+                        {
+                            type: 'live',
+                            text: 'LIVE NOW',
+                        },
+                    ]
                     : [],
                 author: {
                     id: relatedAuthor.id,
@@ -109,7 +109,7 @@ app.get('/search', async (req, res) => {
     let info;
     if (req.query.continuation) {
         const continuation = JSON.parse(
-            Buffer.from(req.query.continuation as string, 'base64').toString()
+            Buffer.from(req.query.continuation as string, 'base64').toString(),
         );
         continuation[3].limit = Infinity;
         info = await ytsr.continueReq(continuation);
@@ -139,8 +139,8 @@ app.get('/search', async (req, res) => {
                             subscribers: reverseFormatNumber(
                                 channel.subscribers?.replace(
                                     ' subscribers',
-                                    ''
-                                ) || '0'
+                                    '',
+                                ) || '0',
                             ),
                             description: channel.descriptionShort,
                             avatars: channel.avatars,
@@ -157,8 +157,27 @@ app.get('/search', async (req, res) => {
                         shelf: {
                             title: shelf.title,
                             videos: shelf.items.map((v) =>
-                                transformYtsrVideo(v as ytsr.Video)
+                                transformYtsrVideo(v as ytsr.Video),
                             ),
+                        },
+                    } as SearchResult;
+                }
+                case 'playlist': {
+                    const playlist = i as ytsr.Playlist;
+
+                    return {
+                        type: 'playlist',
+                        playlist: {
+                            id: playlist.playlistID,
+                            name: playlist.title,
+                            owner: {
+                                id: playlist.owner?.channelID || '',
+                                name: playlist.owner?.name || '',
+                                avatars: [],
+                                verified: playlist.owner?.verified || false,
+                            },
+                            video_count: playlist.length,
+                            thumbnails: playlist.firstVideo?.thumbnails || [],
                         },
                     } as SearchResult;
                 }
@@ -170,7 +189,7 @@ app.get('/search', async (req, res) => {
             }
         }),
         continuation: Buffer.from(JSON.stringify(info.continuation)).toString(
-            'base64'
+            'base64',
         ),
     } as ApiSearchResponse);
 });
@@ -193,7 +212,7 @@ app.get('/channel/:id/videos', async (req, res) => {
     let info;
     if (req.query.continuation) {
         info = await ytChannelInfo.getChannelVideosMore(
-            req.query.continuation as string
+            req.query.continuation as string,
         );
     } else {
         info = await ytChannelInfo.getChannelVideos(req.params.id);
@@ -211,11 +230,11 @@ app.get('/channel/:id/videos', async (req, res) => {
                 lengthSeconds: v.lengthSeconds,
                 badges: v.liveNow
                     ? [
-                          {
-                              type: 'live',
-                              text: 'LIVE NOW',
-                          },
-                      ]
+                        {
+                            type: 'live',
+                            text: 'LIVE NOW',
+                        },
+                    ]
                     : [],
                 thumbnails: v.videoThumbnails,
             };

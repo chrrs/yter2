@@ -17,10 +17,11 @@ export interface ApiChannelVideosResponse {
 }
 
 export interface SearchResult {
-    type: 'video' | 'channel' | 'shelf';
+    type: 'video' | 'channel' | 'shelf' | 'playlist';
     video?: Video;
     channel?: Channel;
     shelf?: SearchShelf;
+    playlist?: Playlist;
 }
 
 export interface SearchShelf {
@@ -79,10 +80,18 @@ export interface Image {
     height: number;
 }
 
+export interface Playlist {
+    id: string;
+    name: string;
+    owner: Channel;
+    video_count: number;
+    thumbnails: Image[];
+}
+
 export function bestFittingImage(
     images: Image[],
     width: number = 0,
-    height: number = 0
+    height: number = 0,
 ): Image | null {
     if (images.length === 0) {
         return null;
@@ -113,7 +122,7 @@ export function videoSubtitle(video: Video): string {
     } else if (video.upcoming) {
         return `Premieres on ${format(
             new Date(video.publishDate || '0'),
-            'Pp'
+            'Pp',
         )}`;
     } else {
         return `${video.views.toLocaleString('en-US')} views • ${
