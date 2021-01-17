@@ -1,7 +1,7 @@
 <template>
-    <div id="background" class="bg-gray-50 min-h-screen">
+    <div id="background" class="flex flex-col bg-gray-50 min-h-screen">
         <Navbar />
-        <Nuxt />
+        <Nuxt class="flex-grow" />
     </div>
 </template>
 
