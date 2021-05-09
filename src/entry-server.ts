@@ -40,7 +40,7 @@ export async function render(
 ) {
     const { app, router } = createApp();
 
-    router.push(url);
+    await router.push(url);
     await router.isReady();
 
     const ctx = {};
