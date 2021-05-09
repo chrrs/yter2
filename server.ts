@@ -4,6 +4,8 @@ import * as express from 'express';
 import { createServer as _createServer, ViteDevServer } from 'vite';
 import * as serveStatic from 'serve-static';
 
+import api_v1 from './src/api_v1/main';
+
 async function createServer(
     root = process.cwd(),
     isProd = process.env.NODE_ENV === 'production'
@@ -35,6 +37,8 @@ async function createServer(
     } else {
         app.use(serveStatic(toAbsolute('dist/client'), { index: false }));
     }
+
+    app.use('/api/v1', api_v1);
 
     app.use('*', async (req, res) => {
         try {

@@ -1,6 +1,6 @@
 {
     "name": "yter2",
-    "version": "0.0.0",
+    "version": "2.2.0",
     "scripts": {
         "dev": "ts-node server",
         "build": "yarn build:client && yarn build:server",
