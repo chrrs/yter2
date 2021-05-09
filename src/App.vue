@@ -8,11 +8,12 @@
 <script lang="ts">
 import 'tailwindcss/tailwind.css';
 import '@mdi/font/scss/materialdesignicons.scss';
+import '@fontsource/roboto/latin.css';
 
 import Navbar from './components/Navbar.vue';
 
 export default {
-    components: {
+        components: {
         Navbar,
     },
 };
