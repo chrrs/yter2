@@ -2,25 +2,36 @@
     <div class="container px-4 lg:px-16 mx-auto mt-4 flex gap-4">
         <div class="flex-1 flex-grow">
             <div
-                v-if="true || fetching"
-                class="bg-black w-full h-32"
+                v-if="error || fetching"
+                class="relative bg-black w-full h-32"
                 style="padding-top: 56.25%"
-            />
-            <div class="divide-y divide-gray-300">
+            >
+                <p
+                    class="flex items-center justify-center gap-6 text-white absolute bottom-1/2 w-full text-2xl"
+                    v-if="error"
+                >
+                    <i
+                        class="mdi mdi-alert-circle-outline text-gray-400"
+                        style="font-size: 140px"
+                    ></i>
+                    Video not available
+                </p>
+            </div>
+            <div v-if="!error" class="divide-y divide-gray-300">
                 <div class="py-4 relative">
                     <div class="text-xs text-indigo-500">#MinecraftManhunt</div>
                     <p class="text-lg text-black">
                         <template v-if="fetching">
                             <SkeletonLine width="300" />
                         </template>
-                        <template v-else>This is the video title</template>
+                        <template v-else>{{ video.title }}</template>
                     </p>
                     <p class="text-sm text-gray-600 mt-2">
                         <template v-if="fetching">
                             <SkeletonLine />
                         </template>
                         <template v-else>
-                            5,123,523 views
+                            {{ formattedViews }} views
                             <span class="hidden xl:inline">
                                 • May 8, 2021
                             </span>
@@ -41,7 +52,7 @@
                                 ></span>
                                 0
                             </p>
-                            <div class="relative h-1 w-full bg-gray-300">
+                            <div class="relative h-0.5 w-full bg-gray-300">
                                 <div
                                     class="bg-gray-600 h-full"
                                     :style="`width: ${0.5 * 100}%`"
@@ -50,7 +61,7 @@
                         </div>
                         <a
                             class="py-2"
-                            :href="`https://youtube.com/watch?v=id`"
+                            :href="`https://youtube.com/watch?v=${$route.query.v}`"
                             target="_blank"
                         >
                             <span
@@ -140,10 +151,13 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import SkeletonLine from '../components/skeleton/SkeletonLine.vue';
 import SkeletonRecommendedVideo from '../components/skeleton/SkeletonRecommendedVideo.vue';
+import { useRoute } from 'vue-router';
+import axios, { AxiosResponse } from 'axios';
+import { ApiError, ApiVideo, Video } from '../api_v1/api_v1';
 
 export default {
     components: {
@@ -151,10 +165,51 @@ export default {
         SkeletonRecommendedVideo,
     },
     setup() {
-        let fetching = ref(false);
+        const route = useRoute();
+
+        const error = ref(false);
+        const fetching = ref(true);
+        const video = ref<Video>(null);
+
+        const formattedViews = computed(() =>
+            video.value.views.toLocaleString('en-US')
+        );
+
+        const fetch = () => {
+            fetching.value = true;
+
+            if (!/^([A-Za-z0-9\-_]){11}$/.test(route.query.v)) {
+                error.value = true;
+                fetching.value = false;
+                return;
+            }
+
+            axios
+                .get(`/api/v1/video/${route.query.v}`)
+                .then((response: AxiosResponse<ApiVideo | ApiError>) => {
+                    console.log(response);
+                    if (response.data.error) {
+                        throw Error(response.data.error);
+                    }
+
+                    video.value = response.data.info;
+                })
+                .catch((e) => {
+                    console.log(e);
+                    error.value = true;
+                })
+                .finally(() => (fetching.value = false));
+        };
+
+        fetch();
 
         return {
+            video,
+            formattedViews,
+
+            error,
             fetching,
+            fetch,
         };
     },
 };

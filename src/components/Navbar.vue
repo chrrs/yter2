@@ -1,7 +1,7 @@
 <template>
     <div class="sticky top-0 z-50 bg-white py-3">
-        <div class="container px-16 mx-auto">
-            <form class="flex w-1/2" @submit.prevent>
+        <div class="flex justify-center container px-16 mx-auto">
+            <form class="flex-grow flex max-w-2xl" @submit.prevent>
                 <div
                     class="flex-grow border border-gray-300 focus-within:border-indigo-700"
                 >
