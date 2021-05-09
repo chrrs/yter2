@@ -19,3 +19,7 @@ export interface ApiVideo {
     info: Video;
     formats: Array<VideoFormat>;
 }
+
+export interface ApiError {
+    error: string;
+}

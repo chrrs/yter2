@@ -18,7 +18,11 @@ router.get(
         .withMessage('A valid youtube video ID needs to be supplied'),
     apiErrors,
     async (req, res) => {
-        res.status(200).json(await getVideoInfo(req.params.id));
+        try {
+            res.status(200).json(await getVideoInfo(req.params.id));
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
     }
 );
 
