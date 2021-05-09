@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import * as express from 'express';
+import express from 'express';
 import { createServer as _createServer, ViteDevServer } from 'vite';
-import * as serveStatic from 'serve-static';
+import serveStatic from 'serve-static';
 
 import api_v1 from './src/api_v1/main';
 
