@@ -23,11 +23,11 @@ export default {
         },
     },
     setup(props) {
-        const video = ref(null);
+        const video = ref<HTMLElement>(null);
         const player = ref<Plyr>(null);
 
         onMounted(() => {
-            player.value = new Plyr(video.value as HTMLElement, {
+            player.value = new Plyr(video.value, {
                 settings: ['quality', 'speed'],
                 quality: {
                     default: 1080,

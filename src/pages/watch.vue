@@ -7,17 +7,36 @@
                     Video not available
                 </p>
             </div>
-            <Player :sources="suitableSources" v-else />
+            <Player v-else :sources="suitableSources" />
             <div v-if="!fetching" class="video-info">
                 <h1 class="title">{{ video.title }}</h1>
                 <p class="subtitle">{{ formattedViews }} views</p>
             </div>
-            <p
-                v-if="!fetching"
-                style="white-space: pre-line; font-size: 0.875rem"
-            >
-                {{ video.description }}
-            </p>
+            <div v-if="!fetching" class="video-details">
+                <img
+                    :src="chooseImage(video.author.avatar, 96).url"
+                    :alt="`${video.author.name}'s profile picture`"
+                    class="author-image"
+                />
+                <div class="details">
+                    <div class="author-info">
+                        <p>
+                            <a href="#" class="author-name">
+                                {{ video.author.name }}
+                            </a>
+                            <i
+                                v-if="video.author.verified"
+                                class="verified mdi mdi-check-circle"
+                            ></i>
+                        </p>
+                        <p class="author-subtitle">
+                            {{ formatNumber(video.author.subscribers) }}
+                            subscribers
+                        </p>
+                    </div>
+                    <div class="video-description">{{ video.description }}</div>
+                </div>
+            </div>
         </div>
         <div class="sidebar"></div>
     </div>
@@ -30,6 +49,7 @@ import Player from '../components/Player.vue';
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
 import { ApiError, ApiVideo, Video, VideoFormat } from '../api_v1/api_v1';
+import { chooseImage, formatNumber } from '../util';
 
 export default {
     components: {
@@ -88,6 +108,9 @@ export default {
             error,
             fetching,
             fetch,
+
+            chooseImage,
+            formatNumber,
         };
     },
 };
@@ -145,6 +168,73 @@ export default {
                 color: $gray-700;
 
                 font-size: 0.875rem;
+            }
+        }
+
+        .video-details {
+            margin-top: 1rem;
+
+            display: flex;
+            gap: 1rem;
+
+            .author-image {
+                flex: 0 0 3rem;
+
+                width: 3rem;
+                height: 3rem;
+
+                border-radius: 100%;
+                background-color: $gray-300;
+            }
+
+            .details {
+                flex-grow: 1;
+
+                .author-info {
+                    height: 3rem;
+
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 0.125rem;
+
+                    p {
+                        margin: 0;
+                    }
+
+                    .author-name {
+                        color: inherit;
+
+                        text-decoration: none;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+
+                    .verified {
+                        margin-left: 0.25rem;
+
+                        color: $gray-700;
+
+                        font-size: 0.875rem;
+                    }
+
+                    .author-subtitle {
+                        color: $gray-700;
+
+                        font-size: 0.75rem;
+                    }
+                }
+
+                .video-description {
+                    margin-top: 1rem;
+
+                    font-size: 0.875rem;
+                    white-space: pre-line;
+                }
             }
         }
     }
