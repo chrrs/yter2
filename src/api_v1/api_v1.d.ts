@@ -5,6 +5,8 @@ export interface Video {
     views: number;
     live: boolean;
     lengthSeconds: number;
+    author: Channel;
+    thumbnail: Array<Image>;
 }
 
 export interface VideoFormat {
@@ -17,9 +19,23 @@ export interface VideoFormat {
     hasAudio: boolean;
 }
 
+export interface Channel {
+    id: string;
+    name: string;
+    subscribers: number;
+    verified: boolean;
+    avatar: Array<Image>;
+}
+
 export interface ApiVideo {
     info: Video;
     formats: Array<VideoFormat>;
+}
+
+export interface Image {
+    url: string;
+    width: number;
+    height: number;
 }
 
 export interface ApiError {

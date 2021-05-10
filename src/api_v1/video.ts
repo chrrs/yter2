@@ -1,4 +1,4 @@
-import { ApiVideo } from './api_v1';
+import { ApiVideo, Image } from './api_v1';
 import ytdl from 'ytdl-core';
 
 export async function getVideoInfo(id: string): Promise<ApiVideo> {
@@ -12,6 +12,14 @@ export async function getVideoInfo(id: string): Promise<ApiVideo> {
             lengthSeconds: parseInt(info.videoDetails.lengthSeconds),
             live: info.videoDetails.isLiveContent,
             views: parseInt(info.videoDetails.viewCount),
+            thumbnail: info.videoDetails.thumbnails as Array<Image>,
+            author: {
+                id: info.videoDetails.author.id,
+                name: info.videoDetails.author.name,
+                subscribers: info.videoDetails.author.subscriber_count || 0,
+                verified: info.videoDetails.author.verified,
+                avatar: info.videoDetails.author.thumbnails as Array<Image>,
+            },
         },
         formats: info.formats.map((format) => {
             return {
