@@ -1,12 +1,19 @@
 <template>
     <div class="watch-container">
         <div class="main-content">
-            <div v-if="error || fetching" class="video-placeholder">
+            <div v-if="true || error || fetching" class="video-placeholder">
                 <p class="error-text" v-if="error">
                     <i class="mdi mdi-alert-circle-outline"></i>
                     Video not available
                 </p>
             </div>
+            <div v-if="!fetching" class="video-info">
+                <h1 class="title">{{ video.title }}</h1>
+                <p class="subtitle">{{ formattedViews }} views</p>
+            </div>
+            <p v-if="!fetching" style="white-space: pre-line; font-size: 0.875rem">
+                {{ video.description }}
+            </p>
         </div>
         <div class="sidebar"></div>
     </div>
@@ -80,7 +87,6 @@ export default {
 .watch-container {
     width: 100vw;
     max-width: 1536px;
-    padding: 0 1rem;
     margin: 1rem auto 0;
 
     display: flex;
@@ -114,10 +120,27 @@ export default {
                 }
             }
         }
+
+        .video-info {
+            border-bottom: 1px solid $gray-300;
+
+            h1.title {
+                margin-top: 1.25rem;
+
+                font-size: 1.125rem;
+                font-weight: normal;
+            }
+
+            p.subtitle {
+                color: $gray-700;
+
+                font-size: 0.875rem;
+            }
+        }
     }
 
     & > .sidebar {
-        width: 402px;
+        flex: 0 0 402px;
     }
 }
 </style>
