@@ -2,7 +2,7 @@ import { ApiVideo } from './api_v1';
 import ytdl from 'ytdl-core';
 
 export async function getVideoInfo(id: string): Promise<ApiVideo> {
-    const info = await ytdl.getBasicInfo(id);
+    const info = await ytdl.getInfo(id);
 
     return {
         info: {
@@ -20,6 +20,8 @@ export async function getVideoInfo(id: string): Promise<ApiVideo> {
                 label: format.qualityLabel,
                 width: format.width || 0,
                 height: format.height || 0,
+                hasVideo: format.hasVideo,
+                hasAudio: format.hasAudio,
             };
         }),
     };

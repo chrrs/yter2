@@ -13,6 +13,8 @@ export interface VideoFormat {
     label: string;
     width: number;
     height: number;
+    hasVideo: boolean;
+    hasAudio: boolean;
 }
 
 export interface ApiVideo {
