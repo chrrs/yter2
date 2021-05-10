@@ -1,17 +1,21 @@
 <template>
     <div class="watch-container">
         <div class="main-content">
-            <div v-if="true || error || fetching" class="video-placeholder">
+            <div v-if="error || fetching" class="video-placeholder">
                 <p class="error-text" v-if="error">
                     <i class="mdi mdi-alert-circle-outline"></i>
                     Video not available
                 </p>
             </div>
+            <Player :sources="sources" v-else />
             <div v-if="!fetching" class="video-info">
                 <h1 class="title">{{ video.title }}</h1>
                 <p class="subtitle">{{ formattedViews }} views</p>
             </div>
-            <p v-if="!fetching" style="white-space: pre-line; font-size: 0.875rem">
+            <p
+                v-if="!fetching"
+                style="white-space: pre-line; font-size: 0.875rem"
+            >
                 {{ video.description }}
             </p>
         </div>
@@ -20,18 +24,16 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
-import SkeletonLine from '../components/skeleton/SkeletonLine.vue';
-import SkeletonRecommendedVideo from '../components/skeleton/SkeletonRecommendedVideo.vue';
+import Player from '../components/Player.vue';
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
-import { ApiError, ApiVideo, Video } from '../api_v1/api_v1';
+import { ApiError, ApiVideo, Video, VideoFormat } from '../api_v1/api_v1';
 
 export default {
     components: {
-        SkeletonLine,
-        SkeletonRecommendedVideo,
+        Player,
     },
     setup() {
         const route = useRoute();
@@ -39,6 +41,7 @@ export default {
         const error = ref(false);
         const fetching = ref(true);
         const video = ref<Video>(null);
+        const sources = ref<Array<VideoFormat>>([]);
 
         const formattedViews = computed(() =>
             video.value.views.toLocaleString('en-US')
@@ -61,6 +64,7 @@ export default {
                     }
 
                     video.value = response.data.info;
+                    sources.value = response.data.formats;
                 })
                 .catch((e) => {
                     console.log(e);
@@ -73,6 +77,7 @@ export default {
 
         return {
             video,
+            sources,
             formattedViews,
 
             error,
