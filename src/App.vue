@@ -1,29 +1,38 @@
 <template>
-    <div class="flex flex-col bg-gray-50 min-h-screen">
+    <div id="app">
         <Navbar />
         <router-view></router-view>
     </div>
 </template>
 
 <script lang="ts">
-import 'tailwindcss/tailwind.css';
+//import 'tailwindcss/tailwind.css';
 import '@mdi/font/scss/materialdesignicons.scss';
 import '@fontsource/roboto/latin.css';
 
 import Navbar from './components/Navbar.vue';
 
 export default {
-        components: {
+    components: {
         Navbar,
     },
 };
 </script>
 
 <style lang="scss">
-html,
-body,
+@import '~normalize-scss/sass/normalize';
+
+@include normalize();
+
 #app {
-    width: 100%;
-    height: 100%;
+    @include fontSans();
+
+    width: 100vw;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: $gray-50;
 }
 </style>
