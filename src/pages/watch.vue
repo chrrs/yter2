@@ -7,7 +7,7 @@
                     Video not available
                 </p>
             </div>
-            <Player :sources="sources" v-else />
+            <Player :sources="suitableSources" v-else />
             <div v-if="!fetching" class="video-info">
                 <h1 class="title">{{ video.title }}</h1>
                 <p class="subtitle">{{ formattedViews }} views</p>
@@ -47,6 +47,10 @@ export default {
             video.value.views.toLocaleString('en-US')
         );
 
+        const suitableSources = computed(() =>
+            sources.value.filter((format) => format.hasAudio && format.hasVideo)
+        );
+
         const fetch = () => {
             fetching.value = true;
 
@@ -78,6 +82,7 @@ export default {
         return {
             video,
             sources,
+            suitableSources,
             formattedViews,
 
             error,
