@@ -8,11 +8,11 @@
                 </p>
             </div>
             <Player v-else :sources="suitableSources" />
-            <div v-if="!fetching" class="video-info">
+            <div v-if="!error && !fetching" class="video-info">
                 <h1 class="title">{{ video.title }}</h1>
                 <p class="subtitle">{{ formattedViews }} views</p>
             </div>
-            <div v-if="!fetching" class="video-details">
+            <div v-if="!error && !fetching" class="video-details">
                 <img
                     :src="chooseImage(video.author.avatar, 96).url"
                     :alt="`${video.author.name}'s profile picture`"
