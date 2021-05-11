@@ -11,7 +11,7 @@
                 v-else
                 :sources="suitableSources"
                 :poster="chooseImage(video?.thumbnail || []).url"
-                :storyboards="`/api/v1/video/${video?.id}/storyboard.vtt`"
+                :storyboards="`/api/v1/video/${video?.id}/storyboards.vtt`"
             />
             <div v-if="!error && !fetching" class="video-info">
                 <h1 class="title">{{ video?.title }}</h1>

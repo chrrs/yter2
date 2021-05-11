@@ -28,7 +28,7 @@ router.get(
     }
 );
 router.get(
-    '/video/:id/storyboard.vtt',
+    '/video/:id/storyboards.vtt',
     param('id')
         .matches(/^([A-Za-z0-9\-_]){11}$/)
         .withMessage('A valid youtube video ID needs to be supplied'),
