@@ -23,15 +23,45 @@ export default {
 
 @include normalize();
 
+* {
+    box-sizing: border-box;
+}
+
 #app {
     @include fontSans();
 
-    width: 100vw;
-    min-height: 100vh;
+    width: 100%;
+    min-height: 100%;
 
     display: flex;
     flex-direction: column;
 
     background-color: $gray-50;
+}
+
+.container {
+    width: 100%;
+    padding: 0 1rem;
+    margin: 0 auto;
+
+    @include mq('sm') {
+        max-width: 640px;
+    }
+
+    @include mq('md') {
+        max-width: 768px;
+    }
+
+    @include mq('lg') {
+        max-width: 1024px;
+    }
+
+    @include mq('xl') {
+        max-width: 1280px;
+    }
+
+    @include mq('2xl') {
+        max-width: 1536px;
+    }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="watch-container">
+    <div class="container watch-container">
         <div class="main-content">
             <div v-if="error || fetching" class="video-placeholder">
                 <p class="error-text" v-if="error">
@@ -61,7 +61,7 @@
                         <p class="author">
                             <a href="#">{{ relatedVideo.author.name }}</a>
                             <i
-                                v-if="video?.author.verified"
+                                v-if="relatedVideo.author.verified"
                                 class="verified mdi mdi-check-circle"
                             ></i>
                         </p>
@@ -160,10 +160,7 @@ export default {
 
 <style scoped lang="scss">
 .watch-container {
-    width: 100vw;
-    max-width: 1536px;
-    padding: 0 1rem;
-    margin: 1rem auto 0;
+    margin-top: 1rem;
 
     display: flex;
     gap: 1rem;

@@ -16,3 +16,23 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+$breakpoints: (
+    "sm": 640px,
+    "md": 768px,
+    "lg": 1024px,
+    "xl": 1280px,
+    "2xl": 1536px,
+);
+
+@mixin mq($width, $type: min) {
+    @if map_has_key($breakpoints, $width) {
+        $width: map_get($breakpoints, $width);
+        @if $type == max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
