@@ -13,6 +13,7 @@ export async function getVideoInfo(id: string): Promise<ApiVideo> {
             live: info.videoDetails.isLiveContent,
             views: parseInt(info.videoDetails.viewCount),
             thumbnail: info.videoDetails.thumbnails as Array<Image>,
+            date: info.videoDetails.publishDate,
             author: {
                 id: info.videoDetails.author.id,
                 name: info.videoDetails.author.name,

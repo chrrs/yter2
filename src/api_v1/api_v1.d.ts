@@ -6,6 +6,7 @@ export interface Video {
     live: boolean;
     lengthSeconds: number;
     author: Channel;
+    date: string;
     thumbnail: Array<Image>;
 }
 

@@ -10,7 +10,9 @@
             <Player v-else :sources="suitableSources" />
             <div v-if="!error && !fetching" class="video-info">
                 <h1 class="title">{{ video?.title }}</h1>
-                <p class="subtitle">{{ formattedViews }} views</p>
+                <p class="subtitle">
+                    {{ formattedViews }} views • {{ formattedDate }}
+                </p>
             </div>
             <div v-if="!error && !fetching" class="video-details">
                 <img
@@ -73,6 +75,14 @@ export default {
             sources.value.filter((format) => format.hasAudio && format.hasVideo)
         );
 
+        const formattedDate = computed(() =>
+            new Date(video.value?.date || '').toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            })
+        );
+
         const fetch = () => {
             fetching.value = true;
 
@@ -104,6 +114,7 @@ export default {
             sources,
             suitableSources,
             formattedViews,
+            formattedDate,
 
             error,
             fetching,
