@@ -35,3 +35,16 @@ export function formatNumber(num: number, digits = 2) {
 
     return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
 }
+
+export function formatSeconds(seconds: number) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds / 60);
+    seconds %= 60;
+
+    let out =
+        hours === 0
+            ? `${minutes}`
+            : `${hours}:${minutes.toString().padStart(2, '0')}`;
+    out += `:${seconds.toString().padStart(2, '0')}`;
+    return out;
+}

@@ -51,11 +51,15 @@
                     @click=""
                     :to="`/watch?v=${relatedVideo.id}`"
                 >
-                    <img
-                        class="thumbnail"
-                        :src="chooseImage(relatedVideo.thumbnail, 320).url"
-                        alt="Video thumbnail"
-                    />
+                    <div class="thumbnail">
+                        <img
+                            :src="chooseImage(relatedVideo.thumbnail, 320).url"
+                            alt="Video thumbnail"
+                        />
+                        <span class="video-length">
+                            {{ formatSeconds(relatedVideo.lengthSeconds) }}
+                        </span>
+                    </div>
                     <div class="video-info">
                         <p class="title">{{ relatedVideo.title }}</p>
                         <p class="author">
@@ -84,7 +88,7 @@ import Player from '../components/Player.vue';
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
 import { ApiVideo, Video, VideoFormat } from '../api_v1/api_v1';
-import { chooseImage, formatNumber } from '../util';
+import { chooseImage, formatNumber, formatSeconds } from '../util';
 
 export default {
     components: {
@@ -153,6 +157,7 @@ export default {
 
             chooseImage,
             formatNumber,
+            formatSeconds,
         };
     },
 };
@@ -274,6 +279,7 @@ export default {
 
                     font-size: 0.875rem;
                     white-space: pre-line;
+                    line-height: 1.5;
                 }
             }
         }
@@ -285,7 +291,7 @@ export default {
         .related-videos {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.5rem;
 
             .related-video {
                 display: flex;
@@ -308,6 +314,25 @@ export default {
                     position: relative;
 
                     background-color: black;
+
+                    & > img {
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    & > .video-length {
+                        position: absolute;
+                        bottom: 0.25rem;
+                        right: 0.25rem;
+                        padding: 0.1rem 0.2rem;
+
+                        color: white;
+                        background-color: rgba(black, 80%);
+                        border-radius: 0.1rem;
+
+                        font-size: 0.75rem;
+                        font-weight: 500;
+                    }
                 }
 
                 & > .video-info {
