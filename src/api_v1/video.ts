@@ -33,5 +33,27 @@ export async function getVideoInfo(id: string): Promise<ApiVideo> {
                 hasAudio: format.hasAudio,
             };
         }),
+        related: info.related_videos.map((related) => {
+            if (typeof related.author === 'string') {
+                throw new Error('Unexpected result');
+            }
+
+            return {
+                id: related.id || '',
+                title: related.title || '',
+                views: parseInt(related.view_count || '0'),
+                author: {
+                    id: related.author.id,
+                    name: related.author.name,
+                    subscribers: related.author.subscriber_count || 0,
+                    verified: related.author.verified,
+                    avatar: related.author.thumbnails || [],
+                },
+                date: related.published || '',
+                live: related.isLive,
+                thumbnail: related.thumbnails as Array<Image>,
+                lengthSeconds: related.length_seconds || 0,
+            };
+        }),
     };
 }

@@ -11,7 +11,8 @@
             <div v-if="!error && !fetching" class="video-info">
                 <h1 class="title">{{ video?.title }}</h1>
                 <p class="subtitle">
-                    {{ formattedViews }} views • {{ formattedDate }}
+                    {{ video?.views?.toLocaleString('en-US') }} views •
+                    {{ formattedDate }}
                 </p>
             </div>
             <div v-if="!error && !fetching" class="video-details">
@@ -42,12 +43,42 @@
                 </div>
             </div>
         </div>
-        <div class="sidebar"></div>
+        <div class="sidebar">
+            <div v-if="!fetching && !error" class="related-videos">
+                <router-link
+                    v-for="relatedVideo in related"
+                    class="related-video"
+                    @click=""
+                    :to="`/watch?v=${relatedVideo.id}`"
+                >
+                    <img
+                        class="thumbnail"
+                        :src="chooseImage(relatedVideo.thumbnail, 320).url"
+                        alt="Video thumbnail"
+                    />
+                    <div class="video-info">
+                        <p class="title">{{ relatedVideo.title }}</p>
+                        <p class="author">
+                            <a href="#">{{ relatedVideo.author.name }}</a>
+                            <i
+                                v-if="video?.author.verified"
+                                class="verified mdi mdi-check-circle"
+                            ></i>
+                        </p>
+                        <p class="details">
+                            {{ relatedVideo.views.toLocaleString('en-US') }}
+                            views •
+                            {{ relatedVideo.date }}
+                        </p>
+                    </div>
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import Player from '../components/Player.vue';
 import { useRoute } from 'vue-router';
@@ -66,10 +97,7 @@ export default {
         const fetching = ref(true);
         const video = ref<Video | null>(null);
         const sources = ref<Array<VideoFormat>>([]);
-
-        const formattedViews = computed(() =>
-            video.value?.views.toLocaleString('en-US')
-        );
+        const related = ref<Array<Video>>([]);
 
         const suitableSources = computed(() =>
             sources.value.filter((format) => format.hasAudio && format.hasVideo)
@@ -99,6 +127,7 @@ export default {
                 .then((response: AxiosResponse<ApiVideo>) => {
                     video.value = response.data.info;
                     sources.value = response.data.formats;
+                    related.value = response.data.related;
                 })
                 .catch((e) => {
                     console.log(e);
@@ -107,13 +136,15 @@ export default {
                 .finally(() => (fetching.value = false));
         };
 
+        watch(() => route.query.v, fetch);
+
         fetch();
 
         return {
             video,
             sources,
+            related,
             suitableSources,
-            formattedViews,
             formattedDate,
 
             error,
@@ -131,6 +162,7 @@ export default {
 .watch-container {
     width: 100vw;
     max-width: 1536px;
+    padding: 0 1rem;
     margin: 1rem auto 0;
 
     display: flex;
@@ -252,6 +284,82 @@ export default {
 
     & > .sidebar {
         flex: 0 0 402px;
+
+        .related-videos {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            .related-video {
+                display: flex;
+                gap: 0.5rem;
+
+                color: inherit;
+                text-decoration: none;
+
+                cursor: pointer;
+
+                &:active {
+                    background-color: $gray-300;
+                    box-shadow: 0 0 0 5px $gray-300;
+                }
+
+                & > .thumbnail {
+                    flex: 0 0 168px;
+                    height: 94px;
+
+                    position: relative;
+
+                    background-color: black;
+                }
+
+                & > .video-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.375rem;
+
+                    & > .title {
+                        margin: 0;
+
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                    }
+
+                    & > .author {
+                        margin: 0;
+
+                        color: $gray-700;
+
+                        font-size: 0.75rem;
+
+                        & > a {
+                            color: inherit;
+                            text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+
+                        .verified {
+                            margin-left: 0.25rem;
+
+                            color: $gray-700;
+
+                            font-size: 0.75rem;
+                        }
+                    }
+
+                    & > .details {
+                        margin: 0;
+
+                        color: $gray-700;
+
+                        font-size: 0.75rem;
+                    }
+                }
+            }
+        }
     }
 }
 </style>

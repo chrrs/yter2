@@ -1,7 +1,7 @@
 export interface Video {
     id: string;
     title: string;
-    description: string;
+    description?: string;
     views: number;
     live: boolean;
     lengthSeconds: number;
@@ -31,6 +31,7 @@ export interface Channel {
 export interface ApiVideo {
     info: Video;
     formats: Array<VideoFormat>;
+    related: Array<Video>;
 }
 
 export interface Image {
