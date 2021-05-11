@@ -9,32 +9,34 @@
             </div>
             <Player v-else :sources="suitableSources" />
             <div v-if="!error && !fetching" class="video-info">
-                <h1 class="title">{{ video.title }}</h1>
+                <h1 class="title">{{ video?.title }}</h1>
                 <p class="subtitle">{{ formattedViews }} views</p>
             </div>
             <div v-if="!error && !fetching" class="video-details">
                 <img
-                    :src="chooseImage(video.author.avatar, 96).url"
-                    :alt="`${video.author.name}'s profile picture`"
+                    :src="chooseImage(video?.author.avatar || [], 96).url"
+                    :alt="`${video?.author.name}'s profile picture`"
                     class="author-image"
                 />
                 <div class="details">
                     <div class="author-info">
                         <p>
                             <a href="#" class="author-name">
-                                {{ video.author.name }}
+                                {{ video?.author.name }}
                             </a>
                             <i
-                                v-if="video.author.verified"
+                                v-if="video?.author.verified"
                                 class="verified mdi mdi-check-circle"
                             ></i>
                         </p>
                         <p class="author-subtitle">
-                            {{ formatNumber(video.author.subscribers) }}
+                            {{ formatNumber(video?.author.subscribers || 0) }}
                             subscribers
                         </p>
                     </div>
-                    <div class="video-description">{{ video.description }}</div>
+                    <div class="video-description">
+                        {{ video?.description }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,7 +50,7 @@ import { computed, ref } from 'vue';
 import Player from '../components/Player.vue';
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
-import { ApiError, ApiVideo, Video, VideoFormat } from '../api_v1/api_v1';
+import { ApiVideo, Video, VideoFormat } from '../api_v1/api_v1';
 import { chooseImage, formatNumber } from '../util';
 
 export default {
@@ -60,11 +62,11 @@ export default {
 
         const error = ref(false);
         const fetching = ref(true);
-        const video = ref<Video>(null);
+        const video = ref<Video | null>(null);
         const sources = ref<Array<VideoFormat>>([]);
 
         const formattedViews = computed(() =>
-            video.value.views.toLocaleString('en-US')
+            video.value?.views.toLocaleString('en-US')
         );
 
         const suitableSources = computed(() =>
@@ -74,7 +76,9 @@ export default {
         const fetch = () => {
             fetching.value = true;
 
-            if (!/^([A-Za-z0-9\-_]){11}$/.test(route.query.v)) {
+            if (
+                !/^([A-Za-z0-9\-_]){11}$/.test((route.query.v as string) || '')
+            ) {
                 error.value = true;
                 fetching.value = false;
                 return;
@@ -82,11 +86,7 @@ export default {
 
             axios
                 .get(`/api/v1/video/${route.query.v}`)
-                .then((response: AxiosResponse<ApiVideo | ApiError>) => {
-                    if (response.data.error) {
-                        throw Error(response.data.error);
-                    }
-
+                .then((response: AxiosResponse<ApiVideo>) => {
                     video.value = response.data.info;
                     sources.value = response.data.formats;
                 })

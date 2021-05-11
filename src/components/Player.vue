@@ -22,12 +22,12 @@ export default {
             default: '',
         },
     },
-    setup(props) {
-        const video = ref<HTMLElement>(null);
-        const player = ref<Plyr>(null);
+    setup(props: { sources: Array<VideoFormat>; storyboards: string }) {
+        const video = ref<HTMLElement | null>(null);
+        const player = ref<Plyr | null>(null);
 
         onMounted(() => {
-            player.value = new Plyr(video.value, {
+            player.value = new Plyr(video.value || '', {
                 settings: ['quality', 'speed'],
                 quality: {
                     default: 1080,
