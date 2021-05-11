@@ -7,7 +7,12 @@
                     Video not available
                 </p>
             </div>
-            <Player v-else :sources="suitableSources" />
+            <Player
+                v-else
+                :sources="suitableSources"
+                :poster="chooseImage(video?.thumbnail || []).url"
+                :storyboards="`/api/v1/video/${video?.id}/storyboard.vtt`"
+            />
             <div v-if="!error && !fetching" class="video-info">
                 <h1 class="title">{{ video?.title }}</h1>
                 <p class="subtitle">

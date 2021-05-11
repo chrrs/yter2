@@ -21,8 +21,16 @@ export default {
             type: String,
             default: '',
         },
+        poster: {
+            type: String,
+            default: '',
+        },
     },
-    setup(props: { sources: Array<VideoFormat>; storyboards: string }) {
+    setup(props: {
+        sources: Array<VideoFormat>;
+        storyboards: string;
+        poster: string;
+    }) {
         const video = ref<HTMLElement | null>(null);
         const player = ref<Plyr | null>(null);
 
@@ -51,6 +59,7 @@ export default {
             });
 
             player.value.source = {
+                poster: props.poster,
                 type: 'video',
                 sources: props.sources.map((format) => {
                     return {

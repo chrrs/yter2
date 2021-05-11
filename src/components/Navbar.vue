@@ -20,7 +20,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-//sticky top-0 z-50 bg-white py-3
 .navbar-wrapper {
     position: sticky;
     top: 0;
