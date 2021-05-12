@@ -123,6 +123,10 @@ export default {
         const fetch = () => {
             fetching.value = true;
 
+            if (typeof window === 'undefined') {
+                return;
+            }
+
             if (
                 !/^([A-Za-z0-9\-_]){11}$/.test((route.query.v as string) || '')
             ) {

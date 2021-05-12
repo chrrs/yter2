@@ -27,6 +27,7 @@ router.get(
         }
     }
 );
+
 router.get(
     '/video/:id/storyboards.vtt',
     param('id')
