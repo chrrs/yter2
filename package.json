@@ -24,6 +24,7 @@
         "ts-node": "^9.1.1",
         "vue": "^3.0.5",
         "vue-router": "4",
+        "youtube-suggest": "^1.1.2",
         "ytdl-core": "^4.7.0"
     },
     "devDependencies": {

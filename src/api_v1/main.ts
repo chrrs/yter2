@@ -1,8 +1,10 @@
 import { Request, Response, Router } from 'express';
-import { param, validationResult } from 'express-validator';
+import { param, query, validationResult } from 'express-validator';
 import { getVideoComments, getVideoInfo } from './video';
 import ytdl from 'ytdl-core';
 import { getStoryboardVTT } from './storyboards';
+// @ts-ignore
+import youtubeSuggest from 'youtube-suggest';
 
 const router = Router();
 
@@ -64,6 +66,19 @@ router.get(
                     req.query['continuation'] as string | undefined
                 )
             );
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    }
+);
+
+router.get(
+    '/search/suggest',
+    query('q').isString(),
+    apiErrors,
+    async (req, res) => {
+        try {
+            res.status(200).json(await youtubeSuggest(req.query.q));
         } catch (e) {
             res.status(400).json({ error: e.message });
         }

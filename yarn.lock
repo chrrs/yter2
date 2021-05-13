@@ -1360,6 +1360,11 @@ negotiator@0.6.2:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
 
+node-fetch@^2.6.0:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
 node-releases@^1.1.71:
   version "1.1.71"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.71.tgz#cb1334b179896b1c89ecfdd4b725fb7bbdfc7dbb"
@@ -1729,6 +1734,11 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
+smol-jsonp@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/smol-jsonp/-/smol-jsonp-1.0.0.tgz#b662c932a193f1a5c6bb1dcdaaddcd4e2007f7df"
+  integrity sha512-EwM2cKsq87A9cCKiAwfp7kVSRtAT01M/3HXaO3tYxP+pnEZ5zVYsxLdTnPjJVVIeK9O2zkV0QbWuwlHEUQNdOA==
+
 source-map-support@^0.5.17:
   version "0.5.19"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.19.tgz#a98b62f86dcaf4f67399648c085291ab9e8fed61"
@@ -2007,6 +2017,14 @@ yn@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
+
+youtube-suggest@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/youtube-suggest/-/youtube-suggest-1.1.2.tgz#3501a0df74cd12d900f8ee6a44a806c20d8a3ff6"
+  integrity sha512-U1CrSIDf9q4H7lx84YiAPfGyMLIXDmSlOLrwcXBkGJFEUodzrD+ZSYMEpJK5UNVWyzE73yxvwGtqrV0dbNQ6LA==
+  dependencies:
+    node-fetch "^2.6.0"
+    smol-jsonp "^1.0.0"
 
 ytdl-core@^4.7.0:
   version "4.7.0"
