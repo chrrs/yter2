@@ -103,6 +103,12 @@
                         </div>
                     </div>
                 </div>
+                <InfiniteScroll
+                    v-if="commentContinuation"
+                    class="spinner"
+                    :disabled="fetchingComments"
+                    @loadMore="fetchComments()"
+                ></InfiniteScroll>
             </div>
         </div>
         <div class="sidebar">
@@ -147,6 +153,8 @@
 import { computed, ref, watch } from 'vue';
 
 import Player from '../components/Player.vue';
+import InfiniteScroll from '../components/InfiniteScroll.vue';
+
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
 import {
@@ -160,6 +168,7 @@ import { chooseImage, formatNumber, formatSeconds } from '../util';
 
 export default {
     components: {
+        InfiniteScroll,
         Player,
     },
     setup() {
@@ -173,6 +182,8 @@ export default {
 
         const comments = ref<Array<Comment>>([]);
         const commentCount = ref(0);
+        const commentContinuation = ref<string | undefined>();
+        const fetchingComments = ref(true);
 
         const suitableSources = computed(() =>
             sources.value.filter((format) => format.hasAudio && format.hasVideo)
@@ -216,19 +227,29 @@ export default {
         };
 
         const fetchComments = () => {
+            fetchingComments.value = true;
+
             if (typeof window === 'undefined') {
                 return;
             }
 
             axios
-                .get(`/api/v1/video/${route.query.v}/comments`)
+                .get(
+                    `/api/v1/video/${route.query.v}/comments${
+                        typeof commentContinuation.value !== 'undefined'
+                            ? `?continuation=${commentContinuation.value}`
+                            : ''
+                    }`
+                )
                 .then((response: AxiosResponse<ApiVideoComments>) => {
                     commentCount.value = response.data.count;
                     comments.value.push(...response.data.comments);
+                    commentContinuation.value = response.data.continuation;
                 })
                 .catch((e) => {
                     console.log(e);
-                });
+                })
+                .finally(() => (fetchingComments.value = false));
         };
 
         watch(
@@ -236,6 +257,7 @@ export default {
             () => {
                 commentCount.value = 0;
                 comments.value = [];
+                commentContinuation.value = undefined;
 
                 fetch();
                 fetchComments();
@@ -254,6 +276,8 @@ export default {
 
             commentCount,
             comments,
+            commentContinuation,
+            fetchingComments,
 
             error,
             fetching,
@@ -394,6 +418,7 @@ export default {
 
         .comments {
             margin-top: 1rem;
+            margin-bottom: 3rem;
 
             display: flex;
             flex-direction: column;
@@ -513,6 +538,10 @@ export default {
                     }
                 }
             }
+        }
+
+        .spinner {
+            align-self: center;
         }
     }
 
