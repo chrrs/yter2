@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { param, validationResult } from 'express-validator';
-import { getVideoInfo } from './video';
+import { getVideoComments, getVideoInfo } from './video';
 import ytdl from 'ytdl-core';
 import { getStoryboardVTT } from './storyboards';
 
@@ -45,6 +45,27 @@ router.get(
                 )
             );
         } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    }
+);
+
+router.get(
+    '/video/:id/comments',
+    param('id')
+        .matches(/^([A-Za-z0-9\-_]){11}$/)
+        .withMessage('A valid youtube video ID needs to be supplied'),
+    apiErrors,
+    async (req, res) => {
+        try {
+            res.status(200).json(
+                await getVideoComments(
+                    req.params.id,
+                    req.query['continuation'] as string | undefined
+                )
+            );
+        } catch (e) {
+            console.log(e);
             res.status(400).json({ error: e.message });
         }
     }

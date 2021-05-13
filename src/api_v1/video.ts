@@ -1,5 +1,7 @@
-import { ApiVideo, Image } from './api_v1';
+import { ApiVideo, ApiVideoComments, Image } from './api_v1';
 import ytdl from 'ytdl-core';
+import axios from 'axios';
+import { InvidiousApiComments } from '../types/invidious';
 
 export async function getVideoInfo(id: string): Promise<ApiVideo> {
     const info = await ytdl.getInfo(id);
@@ -55,5 +57,44 @@ export async function getVideoInfo(id: string): Promise<ApiVideo> {
                 lengthSeconds: related.length_seconds || 0,
             };
         }),
+    };
+}
+
+export async function getVideoComments(
+    id: string,
+    continuation?: string
+): Promise<ApiVideoComments> {
+    const info = (
+        await axios.get(
+            `https://invidious.tube/api/v1/comments/${id}${
+                typeof continuation !== 'undefined'
+                    ? `?continuation=${continuation}`
+                    : ''
+            }`
+        )
+    ).data as InvidiousApiComments;
+
+    return {
+        count: info.commentCount || 0,
+        comments: info.comments.map((comment) => {
+            return {
+                id: comment.commentId,
+                date: comment.publishedText,
+                replies: comment.replies?.replyCount || 0,
+                likes: comment.likeCount,
+                heart: typeof comment.creatorHeart !== 'undefined',
+                author: {
+                    id: comment.authorId,
+                    name: comment.author,
+                    avatar: comment.authorThumbnails as Array<Image>,
+                    verified: false, // TODO: This should be gotten somewhere
+                    subscribers: 0,
+                },
+                edited: comment.isEdited,
+                text: comment.content,
+                continuation: comment.replies?.continuation,
+            };
+        }),
+        continuation: info.continuation,
     };
 }

@@ -28,16 +28,34 @@ export interface Channel {
     avatar: Array<Image>;
 }
 
-export interface ApiVideo {
-    info: Video;
-    formats: Array<VideoFormat>;
-    related: Array<Video>;
+export interface Comment {
+    id: string;
+    author: Channel;
+    text: string;
+    edited: boolean;
+    heart: boolean;
+    likes: number;
+    date: string;
+    replies: number;
+    continuation?: string;
 }
 
 export interface Image {
     url: string;
     width: number;
     height: number;
+}
+
+export interface ApiVideo {
+    info: Video;
+    formats: Array<VideoFormat>;
+    related: Array<Video>;
+}
+
+export interface ApiVideoComments {
+    count: number;
+    comments: Array<Comment>;
+    continuation?: string;
 }
 
 export interface ApiError {
