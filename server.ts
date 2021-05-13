@@ -3,8 +3,10 @@ import { resolve } from 'path';
 import express from 'express';
 import { createServer as _createServer, ViteDevServer } from 'vite';
 import serveStatic from 'serve-static';
-
 import api_v1 from './src/api_v1/main';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function createServer(
     root = process.cwd(),
