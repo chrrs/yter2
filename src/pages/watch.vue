@@ -47,6 +47,63 @@
                     </div>
                 </div>
             </div>
+            <div v-if="!error && !fetching" class="comments">
+                <div class="comment-count">
+                    {{ commentCount.toLocaleString('en-US') }} Comment{{
+                        commentCount === 1 ? '' : 's'
+                    }}
+                </div>
+                <div v-for="comment in comments" class="comment">
+                    <img
+                        class="author-image"
+                        :src="chooseImage(comment.author.avatar, 80).url"
+                        :alt="`${comment.author.name}'s profile picture`"
+                    />
+                    <div class="content">
+                        <p class="header">
+                            <a href="#" class="author-name">{{
+                                comment.author.name
+                            }}</a>
+                            <span class="timestamp">{{ comment.date }}</span>
+                        </p>
+                        <p class="comment-body">
+                            {{ comment.text }}
+                        </p>
+                        <div class="likes">
+                            <div class="like">
+                                <i class="mdi mdi-thumb-up"></i>
+                                <span v-if="comment.likes !== 0" class="amount">
+                                    {{ comment.likes.toLocaleString('en-US') }}
+                                </span>
+                            </div>
+                            <i class="mdi mdi-thumb-down"></i>
+                            <div v-if="comment.heart" class="creator-heart">
+                                <img
+                                    :src="
+                                        chooseImage(
+                                            video?.author?.avatar || [],
+                                            32
+                                        ).url
+                                    "
+                                    :alt="`${video?.author?.name}'s profile picture`"
+                                />
+                                <i class="heart mdi mdi-heart"></i>
+                            </div>
+                        </div>
+                        <div v-if="comment.replies !== 0" class="replies">
+                            <a href="#" class="expand">
+                                <i class="mdi mdi-chevron-down"></i>
+                                View
+                                {{
+                                    comment.replies === 1
+                                        ? 'reply'
+                                        : `${comment.replies} replies`
+                                }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="sidebar">
             <div v-if="!fetching && !error" class="related-videos">
@@ -92,7 +149,13 @@ import { computed, ref, watch } from 'vue';
 import Player from '../components/Player.vue';
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
-import { ApiVideo, Video, VideoFormat } from '../api_v1/api_v1';
+import {
+    ApiVideo,
+    ApiVideoComments,
+    Comment,
+    Video,
+    VideoFormat,
+} from '../api_v1/api_v1';
 import { chooseImage, formatNumber, formatSeconds } from '../util';
 
 export default {
@@ -107,6 +170,9 @@ export default {
         const video = ref<Video | null>(null);
         const sources = ref<Array<VideoFormat>>([]);
         const related = ref<Array<Video>>([]);
+
+        const comments = ref<Array<Comment>>([]);
+        const commentCount = ref(0);
 
         const suitableSources = computed(() =>
             sources.value.filter((format) => format.hasAudio && format.hasVideo)
@@ -149,9 +215,35 @@ export default {
                 .finally(() => (fetching.value = false));
         };
 
-        watch(() => route.query.v, fetch);
+        const fetchComments = () => {
+            if (typeof window === 'undefined') {
+                return;
+            }
+
+            axios
+                .get(`/api/v1/video/${route.query.v}/comments`)
+                .then((response: AxiosResponse<ApiVideoComments>) => {
+                    commentCount.value = response.data.count;
+                    comments.value.push(...response.data.comments);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        };
+
+        watch(
+            () => route.query.v,
+            () => {
+                commentCount.value = 0;
+                comments.value = [];
+
+                fetch();
+                fetchComments();
+            }
+        );
 
         fetch();
+        fetchComments();
 
         return {
             video,
@@ -160,9 +252,13 @@ export default {
             suitableSources,
             formattedDate,
 
+            commentCount,
+            comments,
+
             error,
             fetching,
             fetch,
+            fetchComments,
 
             chooseImage,
             formatNumber,
@@ -227,9 +323,12 @@ export default {
 
         .video-details {
             margin-top: 1rem;
+            padding-bottom: 1rem;
 
             display: flex;
             gap: 1rem;
+
+            border-bottom: 1px solid $gray-300;
 
             .author-image {
                 flex: 0 0 3rem;
@@ -289,6 +388,129 @@ export default {
                     font-size: 0.875rem;
                     white-space: pre-line;
                     line-height: 1.5;
+                }
+            }
+        }
+
+        .comments {
+            margin-top: 1rem;
+
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .comment-count {
+                margin-top: 0.5rem;
+            }
+
+            .comment {
+                display: flex;
+                gap: 1rem;
+
+                & > .author-image {
+                    background-color: $gray-300;
+
+                    width: 2.5rem;
+                    height: 2.5rem;
+
+                    border-radius: 100%;
+                }
+
+                & > .content {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.375rem;
+
+                    & > .header {
+                        margin: 0;
+
+                        font-size: 0.875rem;
+                        font-weight: 500;
+
+                        & > .author-name {
+                            color: inherit;
+
+                            text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+
+                        & > .timestamp {
+                            margin-left: 0.25rem;
+
+                            color: $gray-700;
+
+                            font-size: 0.75rem;
+                            font-weight: normal;
+                        }
+                    }
+
+                    & > .comment-body {
+                        margin: 0;
+
+                        font-size: 0.875rem;
+                    }
+
+                    & > .likes {
+                        margin-top: 0.5rem;
+
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+
+                        color: $gray-700;
+
+                        & > .like {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+
+                            & > .amount {
+                                font-size: 0.75rem;
+                            }
+                        }
+
+                        & > .creator-heart {
+                            position: relative;
+                            width: 1rem;
+                            height: 1rem;
+
+                            & > img {
+                                width: 100%;
+                                height: 100%;
+
+                                border-radius: 100%;
+                            }
+
+                            & > .heart {
+                                position: absolute;
+                                top: 0.5rem;
+                                left: 0.6rem;
+
+                                color: red;
+
+                                font-size: 0.75rem;
+                            }
+                        }
+                    }
+
+                    & > .replies {
+                        margin-top: 0.5rem;
+
+                        & > .expand {
+                            color: $blue-800;
+
+                            font-weight: 500;
+                            font-size: 0.875rem;
+                            text-decoration: none;
+
+                            & > .mdi {
+                                margin-right: 0.5rem;
+                            }
+                        }
+                    }
                 }
             }
         }
