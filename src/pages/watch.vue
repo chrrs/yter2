@@ -172,6 +172,7 @@ import {
     VideoFormat,
 } from '../api_v1/api_v1';
 import { chooseImage, formatNumber, formatSeconds } from '../util';
+import { useHead } from '@vueuse/head';
 
 export default {
     components: {
@@ -203,6 +204,14 @@ export default {
                 day: 'numeric',
             })
         );
+
+        useHead({
+            title: computed(() =>
+                !fetching.value && !error.value
+                    ? `${video.value?.title} - yter2`
+                    : 'yter2'
+            ),
+        });
 
         const fetch = () => {
             fetching.value = true;

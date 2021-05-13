@@ -1,5 +1,6 @@
 import { createApp } from './main';
 import { renderToString } from '@vue/server-renderer';
+import { renderHeadToString } from '@vueuse/head';
 
 function renderPreloadLinks(
     modules: Array<string>,
@@ -38,15 +39,16 @@ export async function render(
     url: string,
     manifest: { [key: string]: Array<string> }
 ) {
-    const { app, router } = createApp();
+    const { app, router, head } = createApp();
 
     await router.push(url);
     await router.isReady();
 
     const ctx = {};
     const html = await renderToString(app, ctx);
+    const { headTags } = await renderHeadToString(head);
 
     // @ts-ignore
     const preloadLinks = renderPreloadLinks(ctx.modules, manifest);
-    return [html, preloadLinks];
+    return [html, preloadLinks, headTags];
 }
