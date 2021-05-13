@@ -61,9 +61,16 @@
                     />
                     <div class="content">
                         <p class="header">
-                            <a href="#" class="author-name">{{
-                                comment.author.name
-                            }}</a>
+                            <a
+                                href="#"
+                                class="author-name"
+                                :class="{
+                                    'video-author':
+                                        comment.author.id === video?.author?.id,
+                                }"
+                            >
+                                {{ comment.author.name }}
+                            </a>
                             <span class="timestamp">{{ comment.date }}</span>
                         </p>
                         <p class="comment-body">
@@ -449,7 +456,7 @@ export default {
                     & > .header {
                         margin: 0;
 
-                        font-size: 0.875rem;
+                        font-size: 0.8125rem;
                         font-weight: 500;
 
                         & > .author-name {
@@ -459,6 +466,17 @@ export default {
 
                             &:hover {
                                 text-decoration: underline;
+                            }
+
+                            &.video-author {
+                                padding: 0 0.375rem;
+                                display: inline-block;
+
+                                background-color: $gray-600;
+                                color: white;
+
+                                line-height: 1.25rem;
+                                border-radius: 1.25rem;
                             }
                         }
 
