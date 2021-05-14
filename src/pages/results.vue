@@ -58,9 +58,11 @@ import axios, { AxiosResponse } from 'axios';
 import { useRoute } from 'vue-router';
 import { chooseImage } from '../util';
 import LazyImage from '../components/LazyImage.vue';
+import ClickableDiv from '../components/ClickableDiv.vue';
 
 export default {
     components: { LazyImage },
+    components: { ClickableDiv, LazyImage },
     setup() {
         const route = useRoute();
         const fetching = ref(true);
@@ -118,12 +120,7 @@ export default {
     .video-result {
         display: flex;
 
-        color: inherit;
-        text-decoration: none;
 
-        &:active {
-            background-color: $gray-300;
-            box-shadow: 0 0 0 5px $gray-300;
         }
 
         .thumbnail {

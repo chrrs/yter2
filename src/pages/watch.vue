@@ -120,7 +120,7 @@
         </div>
         <div class="sidebar">
             <div v-if="!fetching && !error" class="related-videos">
-                <router-link
+                <ClickableDiv
                     v-for="relatedVideo in related"
                     class="related-video"
                     @click=""
@@ -150,7 +150,7 @@
                             {{ relatedVideo.date }}
                         </p>
                     </div>
-                </router-link>
+                </ClickableDiv>
             </div>
         </div>
     </div>
@@ -161,6 +161,7 @@ import { computed, ref, watch } from 'vue';
 
 import Player from '../components/Player.vue';
 import InfiniteScroll from '../components/InfiniteScroll.vue';
+import LazyImage from '../components/LazyImage.vue';
 
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
@@ -173,10 +174,11 @@ import {
 } from '../api_v1/api_v1';
 import { chooseImage, formatNumber, formatSeconds } from '../util';
 import { useHead } from '@vueuse/head';
-import LazyImage from '../components/LazyImage.vue';
+import ClickableDiv from '../components/ClickableDiv.vue';
 
 export default {
     components: {
+        ClickableDiv,
         LazyImage,
         InfiniteScroll,
         Player,
@@ -586,15 +588,7 @@ export default {
                 display: flex;
                 gap: 0.5rem;
 
-                color: inherit;
-                text-decoration: none;
-
                 cursor: pointer;
-
-                &:active {
-                    background-color: $gray-300;
-                    box-shadow: 0 0 0 5px $gray-300;
-                }
 
                 & > .thumbnail {
                     flex: 0 0 168px;
