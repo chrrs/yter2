@@ -49,7 +49,7 @@ export function parseNumberSuffix(num: string): number {
             break;
     }
 
-    return parseFloat(num.replaceAll(/[^0-9]/g, '')) * multiplier;
+    return parseFloat(num.replaceAll(/[^0-9,. ]/g, '')) * multiplier;
 }
 
 export function formatSeconds(seconds: number) {

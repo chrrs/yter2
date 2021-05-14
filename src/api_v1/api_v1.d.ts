@@ -49,9 +49,15 @@ export interface Image {
 }
 
 export interface SearchResult {
-    type: 'video' | 'channel';
+    type: 'video' | 'channel' | 'shelf';
     video?: Video;
     channel?: Channel;
+    shelf?: Shelf;
+}
+
+export interface Shelf {
+    name: string;
+    items: Array<SearchResult>;
 }
 
 export interface ApiVideo {

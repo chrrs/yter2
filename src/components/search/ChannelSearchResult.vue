@@ -16,9 +16,12 @@
             </p>
             <p class="subtitle">
                 {{ formatNumber(channel.subscribers) }}
-                subscribers •
-                {{ channel.videos.toLocaleString('en-US') }}
-                video{{ channel.videos === 1 ? '' : 's' }}
+                subscribers
+                <template v-if="channel.videos">
+                    •
+                    {{ channel.videos.toLocaleString('en-US') }}
+                    video{{ channel.videos === 1 ? '' : 's' }}
+                </template>
             </p>
             <p class="description">
                 {{ channel.description }}
