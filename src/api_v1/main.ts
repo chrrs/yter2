@@ -5,6 +5,7 @@ import ytdl from 'ytdl-core';
 import { getStoryboardVTT } from './storyboards';
 // @ts-ignore
 import youtubeSuggest from 'youtube-suggest';
+import { getSearchResults } from './search';
 
 const router = Router();
 
@@ -84,6 +85,14 @@ router.get(
         }
     }
 );
+
+router.get('/search', query('q').isString(), apiErrors, async (req, res) => {
+    try {
+        res.status(200).json(await getSearchResults(req.query.q as string));
+    } catch (e) {
+        res.status(400).json({ error: e.message });
+    }
+});
 
 function apiErrors(req: Request, res: Response, next: Function) {
     const errors = validationResult(req);

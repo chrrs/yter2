@@ -46,6 +46,11 @@ export interface Image {
     height: number;
 }
 
+export interface SearchResult {
+    type: 'video';
+    video?: Video;
+}
+
 export interface ApiVideo {
     info: Video;
     formats: Array<VideoFormat>;
@@ -56,6 +61,11 @@ export interface ApiVideoComments {
     count: number;
     comments: Array<Comment>;
     continuation?: string;
+}
+
+export interface ApiSearchResults {
+    count?: number;
+    results: Array<SearchResult>;
 }
 
 export interface ApiError {

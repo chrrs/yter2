@@ -98,3 +98,16 @@ export function debounce<F extends Procedure>(
 
     return debouncedFunction;
 }
+
+export function parseDuration(duration: string): number {
+    const parts = duration.split(':').map((i) => parseInt(i));
+
+    switch (parts.length) {
+        case 3:
+            return parts[0] * 3600 + parts[1] * 60 + parts[2];
+        case 2:
+            return parts[0] * 60 + parts[1];
+        default:
+            return parts[0];
+    }
+}
