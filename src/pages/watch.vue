@@ -85,7 +85,7 @@
                             </div>
                             <i class="mdi mdi-thumb-down"></i>
                             <div v-if="comment.heart" class="creator-heart">
-                                <img
+                                <LazyImage
                                     :src="
                                         chooseImage(
                                             video?.author?.avatar || [],
@@ -127,7 +127,7 @@
                     :to="`/watch?v=${relatedVideo.id}`"
                 >
                     <div class="thumbnail">
-                        <img
+                        <LazyImage
                             :src="chooseImage(relatedVideo.thumbnail, 320).url"
                             alt="Video thumbnail"
                         />
@@ -173,9 +173,11 @@ import {
 } from '../api_v1/api_v1';
 import { chooseImage, formatNumber, formatSeconds } from '../util';
 import { useHead } from '@vueuse/head';
+import LazyImage from '../components/LazyImage.vue';
 
 export default {
     components: {
+        LazyImage,
         InfiniteScroll,
         Player,
     },

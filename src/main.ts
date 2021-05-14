@@ -1,7 +1,7 @@
-import { createSSRApp } from "vue";
-import { createRouter } from "./router";
-import App from "./App.vue";
-import { createHead } from "@vueuse/head";
+import { createSSRApp } from 'vue';
+import { createRouter } from './router';
+import App from './App.vue';
+import { createHead } from '@vueuse/head';
 
 export function createApp() {
     const app = createSSRApp(App);

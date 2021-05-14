@@ -7,7 +7,7 @@
                     class="video-result"
                     :to="`/watch?v=${result.video?.id}`"
                 >
-                    <img
+                    <LazyImage
                         :src="chooseImage(result.video?.thumbnail, 640).url"
                         alt="Video thumbnail"
                         class="thumbnail"
@@ -23,7 +23,7 @@
                             views • {{ result.video?.date }}
                         </p>
                         <div class="author">
-                            <img
+                            <LazyImage
                                 :src="
                                     chooseImage(
                                         result.video?.author?.avatar,
@@ -57,8 +57,10 @@ import { ApiSearchResults, SearchResult } from '../api_v1/api_v1';
 import axios, { AxiosResponse } from 'axios';
 import { useRoute } from 'vue-router';
 import { chooseImage } from '../util';
+import LazyImage from '../components/LazyImage.vue';
 
 export default {
+    components: { LazyImage },
     setup() {
         const route = useRoute();
         const fetching = ref(true);
@@ -125,8 +127,6 @@ export default {
         }
 
         .thumbnail {
-            background-color: black;
-
             margin-right: 1rem;
             height: 12.5rem;
             width: 22.5rem;
@@ -159,8 +159,6 @@ export default {
                 gap: 0.5rem;
 
                 & > .author-avatar {
-                    background-color: $gray-300;
-
                     width: 1.5rem;
                     height: 1.5rem;
 
