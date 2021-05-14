@@ -2,50 +2,76 @@
     <div class="container">
         <div v-if="!error && !fetching" class="results">
             <template v-for="result in results" :key="result">
-                <router-link
+                <ClickableDiv
+                    v-if="result.type === 'channel'"
+                    class="channel-result"
+                    to=""
+                >
+                    <div class="avatar">
+                        <LazyImage
+                            :src="chooseImage(result.channel.avatar, 272).url"
+                            :alt="`${result.channel.name}`"
+                        />
+                    </div>
+                    <div class="channel-details">
+                        <p class="channel-name">
+                            {{ result.channel.name
+                            }}<i
+                                v-if="result.channel.verified"
+                                class="verified mdi mdi-check-circle"
+                            ></i>
+                        </p>
+                        <p class="subtitle">
+                            {{ formatNumber(result.channel.subscribers) }}
+                            subscribers
+                        </p>
+                        <p class="description">
+                            {{ result.channel.description }}
+                        </p>
+                    </div>
+                </ClickableDiv>
+                <ClickableDiv
                     v-if="result.type === 'video'"
                     class="video-result"
-                    :to="`/watch?v=${result.video?.id}`"
+                    :to="`/watch?v=${result.video.id}`"
                 >
                     <LazyImage
-                        :src="chooseImage(result.video?.thumbnail, 640).url"
+                        :src="chooseImage(result.video.thumbnail, 640).url"
                         alt="Video thumbnail"
                         class="thumbnail"
                     />
                     <div class="video-details">
-                        <p class="title">{{ result.video?.title }}</p>
+                        <p class="title">{{ result.video.title }}</p>
                         <p class="subtitle">
                             {{
-                                (result.video?.views || 0).toLocaleString(
+                                (result.video.views || 0).toLocaleString(
                                     'en-US'
                                 )
                             }}
-                            views • {{ result.video?.date }}
+                            views • {{ result.video.date }}
                         </p>
                         <div class="author">
                             <LazyImage
                                 :src="
-                                    chooseImage(
-                                        result.video?.author?.avatar,
-                                        48
-                                    ).url
+                                    chooseImage(result.video.author.avatar, 48)
+                                        .url
                                 "
-                                :alt="`${result.video?.author?.name}'s profile picture`"
+                                :alt="`${result.video.author.name}'s profile picture`"
                                 class="author-avatar"
                             />
                             <p class="author-name">
-                                <a href="#">{{ result.video?.author?.name }}</a>
+                                <a href="#">{{ result.video.author.name }}</a>
                                 <i
-                                    v-if="result.video?.author?.verified"
+                                    v-if="result.video.author.verified"
                                     class="verified mdi mdi-check-circle"
                                 ></i>
                             </p>
                         </div>
                         <div class="description">
-                            {{ result.video?.description }}
+                            {{ result.video.description }}
                         </div>
                     </div>
-                </router-link>
+                </ClickableDiv>
             </template>
         </div>
     </div>
@@ -56,12 +82,11 @@ import { ref, watch } from 'vue';
 import { ApiSearchResults, SearchResult } from '../api_v1/api_v1';
 import axios, { AxiosResponse } from 'axios';
 import { useRoute } from 'vue-router';
-import { chooseImage } from '../util';
+import { chooseImage, formatNumber } from '../util';
 import LazyImage from '../components/LazyImage.vue';
 import ClickableDiv from '../components/ClickableDiv.vue';
 
 export default {
-    components: { LazyImage },
     components: { ClickableDiv, LazyImage },
     setup() {
         const route = useRoute();
@@ -104,6 +129,7 @@ export default {
             results,
 
             chooseImage,
+            formatNumber,
         };
     },
 };
@@ -117,11 +143,63 @@ export default {
     flex-direction: column;
     gap: 1rem;
 
-    .video-result {
+    .channel-result {
         display: flex;
 
+        .avatar {
+            margin-right: 1rem;
+            width: 22.5rem;
 
+            @include flexCenter();
+
+            & > img {
+                width: 8.5rem;
+                height: 8.5rem;
+
+                border-radius: 100%;
+            }
         }
+
+        .channel-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.5rem;
+
+            & > .channel-name {
+                margin: 0;
+
+                font-size: 1.125rem;
+
+                & > .verified {
+                    margin-left: 0.25rem;
+
+                    color: $gray-700;
+
+                    font-size: 1rem;
+                }
+            }
+
+            & > .subtitle {
+                margin: 0;
+
+                color: $gray-700;
+
+                font-size: 0.75rem;
+            }
+
+            & > .description {
+                margin: 0;
+
+                color: $gray-700;
+
+                font-size: 0.75rem;
+            }
+        }
+    }
+
+    .video-result {
+        display: flex;
 
         .thumbnail {
             margin-right: 1rem;

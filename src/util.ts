@@ -36,6 +36,22 @@ export function formatNumber(num: number, digits = 2) {
     return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
 }
 
+export function parseNumberSuffix(num: string): number {
+    num = num.replaceAll(/ subscribers?/g, '');
+
+    let multiplier = 1;
+    switch (num[num.length - 1]) {
+        case 'K':
+            multiplier = 1000;
+            break;
+        case 'M':
+            multiplier = 1000000;
+            break;
+    }
+
+    return parseFloat(num.replaceAll(/[^0-9]/g, '')) * multiplier;
+}
+
 export function formatSeconds(seconds: number) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor(seconds / 60) % 60;
