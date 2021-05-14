@@ -1,6 +1,6 @@
 import { ApiSearchResults } from './api_v1';
 import ytsr from 'ytsr';
-import { parseDuration } from '../util';
+import { parseDuration, parseNumberSuffix } from '../util';
 
 export async function getSearchResults(
     query: string
@@ -10,7 +10,7 @@ export async function getSearchResults(
     return {
         count: results.results,
         results: results.items
-            .filter((item) => item.type === 'video')
+            .filter((item) => item.type === 'video' || item.type === 'channel')
             .map((item) => {
                 switch (item.type) {
                     case 'video':
@@ -49,6 +49,26 @@ export async function getSearchResults(
                                 lengthSeconds: parseDuration(
                                     item.duration || '0'
                                 ),
+                            },
+                        };
+                    case 'channel':
+                        return {
+                            type: 'channel',
+                            channel: {
+                                id: item.channelID,
+                                name: item.name,
+                                subscribers: parseNumberSuffix(
+                                    item.subscribers || '0'
+                                ),
+                                verified: item.verified,
+                                avatar: item.avatars.map((thumbnail) => {
+                                    return {
+                                        url: thumbnail.url || '',
+                                        width: thumbnail.width,
+                                        height: thumbnail.height,
+                                    };
+                                }),
+                                description: item.descriptionShort || undefined,
                             },
                         };
                     default:

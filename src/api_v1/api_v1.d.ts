@@ -26,6 +26,7 @@ export interface Channel {
     subscribers: number;
     verified: boolean;
     avatar: Array<Image>;
+    description?: string;
 }
 
 export interface Comment {
@@ -47,8 +48,9 @@ export interface Image {
 }
 
 export interface SearchResult {
-    type: 'video';
+    type: 'video' | 'channel';
     video?: Video;
+    channel?: Channel;
 }
 
 export interface ApiVideo {
