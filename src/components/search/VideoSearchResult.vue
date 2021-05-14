@@ -1,10 +1,14 @@
 <template>
     <ClickableDiv class="video-result" :to="`/watch?v=${video.id}`">
-        <LazyImage
-            :src="chooseImage(video.thumbnail, 640).url"
-            alt="Video thumbnail"
-            class="thumbnail"
-        />
+        <div class="thumbnail">
+            <LazyImage
+                :src="chooseImage(video.thumbnail, 640).url"
+                alt="Video thumbnail"
+            />
+            <span class="video-length">
+                {{ formatSeconds(video.lengthSeconds) }}
+            </span>
+        </div>
         <div class="video-details">
             <p class="title">{{ video.title }}</p>
             <p class="subtitle">
@@ -35,7 +39,7 @@
 <script lang="ts">
 import { toRefs, PropType } from 'vue';
 import { Video } from '../../api_v1/api_v1';
-import { chooseImage } from '../../util';
+import { chooseImage, formatSeconds } from '../../util';
 import ClickableDiv from '../ClickableDiv.vue';
 import LazyImage from '../LazyImage.vue';
 
@@ -55,6 +59,7 @@ export default {
             video,
 
             chooseImage,
+            formatSeconds,
         };
     },
 };
@@ -65,9 +70,30 @@ export default {
     display: flex;
 
     .thumbnail {
+        position: relative;
         margin-right: 1rem;
-        height: 12.5rem;
+
         width: 22.5rem;
+        height: 12.5rem;
+
+        & > img {
+            width: 100%;
+            height: 100%;
+        }
+
+        & > .video-length {
+            position: absolute;
+            bottom: 0.25rem;
+            right: 0.25rem;
+            padding: 0.1rem 0.2rem;
+
+            color: white;
+            background-color: rgba(black, 80%);
+            border-radius: 0.1rem;
+
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
     }
 
     .video-details {
