@@ -2,7 +2,7 @@
     <img ref="img" v-bind="$attrs" />
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted, ref, toRefs } from 'vue';
 
 export default {
