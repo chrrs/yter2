@@ -26,11 +26,14 @@ export default {
             default: '',
         },
     },
-    setup(props: {
-        sources: Array<VideoFormat>;
-        storyboards: string;
-        poster: string;
-    }) {
+    setup(
+        props: {
+            sources: Array<VideoFormat>;
+            storyboards: string;
+            poster: string;
+        },
+        { emit }
+    ) {
         const video = ref<HTMLElement | null>(null);
         const player = ref<Plyr | null>(null);
 
@@ -69,6 +72,26 @@ export default {
                     };
                 }),
             };
+
+            const button = document.createElement('button');
+            button.className = 'plyr__controls__item plyr__control';
+            button.innerHTML =
+                '<svg width="18" height="18" style="fill: transparent">' +
+                '<rect x="1" y="3" width="16" height="12" style="stroke: white; stroke-width: 2"></rect>' +
+                '</svg>';
+
+            button.onclick = () => {
+                emit('theatre-mode');
+            };
+
+            document
+                .querySelector('.plyr__controls')
+                .insertBefore(
+                    button,
+                    document.querySelector(
+                        '.plyr__control[data-plyr="fullscreen"]'
+                    )
+                );
         });
 
         onBeforeUnmount(() => {

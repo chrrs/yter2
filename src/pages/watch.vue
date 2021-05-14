@@ -1,18 +1,27 @@
 <template>
+    <div class="theatre-container">
+        <div id="theatre" class="container"></div>
+    </div>
     <div class="container watch-container">
         <div class="main-content">
-            <div v-if="error || fetching" class="video-placeholder">
-                <p class="error-text" v-if="error">
-                    <i class="mdi mdi-alert-circle-outline"></i>
-                    Video not available
-                </p>
+            <div class="video-container">
+                <div class="video-placeholder" v-if="fetching || error">
+                    <p class="error-text" v-if="error">
+                        <i class="mdi mdi-alert-circle-outline"></i>
+                        Video not available
+                    </p>
+                </div>
+                <teleport to="#theatre" :disabled="!theatre">
+                    <Player
+                        v-if="!fetching && !error"
+                        :sources="suitableSources"
+                        :poster="chooseImage(video?.thumbnail || []).url"
+                        :storyboards="`/api/v1/video/${video?.id}/storyboards.vtt`"
+                        @theatre-mode="theatre = !theatre"
+                        class="player"
+                    />
+                </teleport>
             </div>
-            <Player
-                v-else
-                :sources="suitableSources"
-                :poster="chooseImage(video?.thumbnail || []).url"
-                :storyboards="`/api/v1/video/${video?.id}/storyboards.vtt`"
-            />
             <div v-if="!error && !fetching" class="video-info">
                 <h1 class="title">{{ video?.title }}</h1>
                 <p class="subtitle">
@@ -197,6 +206,8 @@ export default {
         const commentContinuation = ref<string | undefined>();
         const fetchingComments = ref(true);
 
+        const theatre = ref(false);
+
         const suitableSources = computed(() =>
             sources.value.filter((format) => format.hasAudio && format.hasVideo)
         );
@@ -299,6 +310,8 @@ export default {
             commentContinuation,
             fetchingComments,
 
+            theatre,
+
             error,
             fetching,
             fetch,
@@ -313,6 +326,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.theatre-container {
+    background-color: black;
+    width: 100%;
+}
+
 .watch-container {
     margin-top: 1rem;
 
@@ -348,11 +366,15 @@ export default {
             }
         }
 
+        .player {
+            margin-bottom: 1rem;
+        }
+
         .video-info {
             border-bottom: 1px solid $gray-300;
 
             h1.title {
-                margin-top: 1.25rem;
+                margin-top: 0.25rem;
 
                 font-size: 1.125rem;
                 font-weight: normal;
