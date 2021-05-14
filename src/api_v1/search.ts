@@ -69,6 +69,7 @@ export async function getSearchResults(
                                     };
                                 }),
                                 description: item.descriptionShort || undefined,
+                                videos: item.videos || undefined,
                             },
                         };
                     default:

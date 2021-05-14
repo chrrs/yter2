@@ -27,6 +27,7 @@ export interface Channel {
     verified: boolean;
     avatar: Array<Image>;
     description?: string;
+    videos?: number;
 }
 
 export interface Comment {

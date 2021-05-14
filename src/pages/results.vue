@@ -23,7 +23,9 @@
                         </p>
                         <p class="subtitle">
                             {{ formatNumber(result.channel.subscribers) }}
-                            subscribers
+                            subscribers •
+                            {{ result.channel.videos.toLocaleString('en-US') }}
+                            video{{ result.channel.videos === 1 ? '' : 's' }}
                         </p>
                         <p class="description">
                             {{ result.channel.description }}
@@ -167,7 +169,7 @@ export default {
             gap: 0.5rem;
 
             & > .channel-name {
-                margin: 0;
+                margin: 0 0 0.25rem;
 
                 font-size: 1.125rem;
 
