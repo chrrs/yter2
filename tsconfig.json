@@ -9,7 +9,8 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "lib": ["esnext", "dom"],
-        "types": ["vite/client", "node"]
+        "types": ["vite/client", "node"],
+        "outDir": "dist/server"
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+    "include": ["server.ts"]
 }

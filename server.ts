@@ -12,13 +12,15 @@ async function createServer(
     root = process.cwd(),
     isProd = process.env.NODE_ENV === 'production'
 ) {
-    const toAbsolute = (p: string): string => resolve(__dirname, p);
+    const toAbsolute = (p: string): string => resolve(root, p);
 
     const indexProd = isProd
         ? readFileSync(toAbsolute('dist/client/index.html'), 'utf-8')
         : '';
 
-    const manifest = isProd ? require('./dist/client/ssr-manifest.json') : {};
+    const manifest = isProd
+        ? require(toAbsolute('./dist/client/ssr-manifest.json'))
+        : {};
 
     const app = express();
 
@@ -54,7 +56,8 @@ async function createServer(
                     .render;
             } else {
                 template = indexProd;
-                render = require('./dist/server/entry-server.js').render;
+                render = require(toAbsolute('./dist/server/entry-server.js'))
+                    .render;
             }
 
             const [appHtml, preloadLinks, headTags] = await render(

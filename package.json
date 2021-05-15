@@ -5,8 +5,8 @@
         "dev": "ts-node server",
         "build": "yarn build:client && yarn build:server",
         "build:client": "vite build --ssrManifest --outDir dist/client",
-        "build:server": "vite build --ssr src/entry-server.ts --outDir dist/server",
-        "serve": "cross-env NODE_ENV=production ts-node --transpile-only server"
+        "build:server": "vite build --ssr src/entry-server.ts --outDir dist/server && tsc",
+        "serve": "cross-env NODE_ENV=production node dist/server/server"
     },
     "dependencies": {
         "@fontsource/roboto": "^4.3.0",
@@ -24,7 +24,6 @@
         "plyr": "^3.6.7",
         "postcss": "^8.2.14",
         "serve-static": "^1.14.1",
-        "ts-node": "^9.1.1",
         "vue": "^3.0.5",
         "vue-router": "4",
         "youtube-suggest": "^1.1.2",
@@ -39,6 +38,7 @@
         "eslint": "^7.26.0",
         "prettier": "^2.2.1",
         "sass": "^1.32.12",
+        "ts-node": "^9.1.1",
         "typescript": "^4.1.3",
         "vite": "^2.2.3",
         "vue-tsc": "^0.0.24"
