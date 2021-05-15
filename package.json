@@ -1,6 +1,9 @@
 {
     "name": "yter2",
     "version": "2.2.0",
+    "engines": {
+        "node": ">=15.0.0"
+    },
     "scripts": {
         "dev": "ts-node server",
         "build": "yarn build:client && yarn build:server",
