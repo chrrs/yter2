@@ -67,7 +67,7 @@ export async function getVideoComments(
     const info = (
         await axios.get(
             `${
-                process.env.INVIDIOUS_URL || 'https://invidious.tube'
+                process.env.INVIDIOUS_URL || 'https://invidious.exonip.de'
             }/api/v1/comments/${id}${
                 typeof continuation !== 'undefined'
                     ? `?continuation=${continuation}`
