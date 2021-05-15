@@ -86,7 +86,7 @@ export default {
 
             document
                 .querySelector('.plyr__controls')
-                .insertBefore(
+                ?.insertBefore(
                     button,
                     document.querySelector(
                         '.plyr__control[data-plyr="fullscreen"]'

@@ -75,6 +75,7 @@ export interface ApiVideoComments {
 export interface ApiSearchResults {
     count?: number;
     results: Array<SearchResult>;
+    continuation?: string;
 }
 
 export interface ApiError {

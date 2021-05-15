@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { param, query, validationResult } from 'express-validator';
+import { oneOf, param, query, validationResult } from 'express-validator';
 import { getVideoComments, getVideoInfo } from './video';
 import ytdl from 'ytdl-core';
 import { getStoryboardVTT } from './storyboards';
@@ -86,13 +86,23 @@ router.get(
     }
 );
 
-router.get('/search', query('q').isString(), apiErrors, async (req, res) => {
-    try {
-        res.status(200).json(await getSearchResults(req.query.q as string));
-    } catch (e) {
-        res.status(400).json({ error: e.message });
+router.get(
+    '/search',
+    oneOf([query('q').isString(), query('continuation').isString()]),
+    apiErrors,
+    async (req, res) => {
+        try {
+            res.status(200).json(
+                await getSearchResults(
+                    req.query.q as string,
+                    req.query.continuation as string | undefined
+                )
+            );
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
     }
-});
+);
 
 function apiErrors(req: Request, res: Response, next: Function) {
     const errors = validationResult(req);

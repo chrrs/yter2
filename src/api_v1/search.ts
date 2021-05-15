@@ -1,10 +1,34 @@
 import { ApiSearchResults, SearchResult, Shelf } from './api_v1';
 import ytsr, { Item } from 'ytsr';
 import { parseDuration, parseNumberSuffix } from '../util';
+import base64url from 'base64url';
 
 export async function getSearchResults(
-    query: string
+    query: string,
+    continuationString?: string
 ): Promise<ApiSearchResults> {
+    if (typeof continuationString !== 'undefined') {
+        const continuation = JSON.parse(base64url.decode(continuationString));
+        continuation[3].limit = Infinity;
+
+        const results = await ytsr.continueReq(continuation);
+
+        return {
+            results: results.items
+                .filter(
+                    (item) =>
+                        item.type === 'video' ||
+                        item.type === 'channel' ||
+                        item.type === 'shelf'
+                )
+                .map(parseItem),
+            continuation:
+                typeof results.continuation === 'undefined'
+                    ? undefined
+                    : base64url(JSON.stringify(results.continuation)),
+        };
+    }
+
     const results = await ytsr(query, { pages: 1 });
 
     return {
@@ -17,6 +41,10 @@ export async function getSearchResults(
                     item.type === 'shelf'
             )
             .map(parseItem),
+        continuation:
+            typeof results.continuation === 'undefined'
+                ? undefined
+                : base64url(JSON.stringify(results.continuation)),
     };
 }
 
