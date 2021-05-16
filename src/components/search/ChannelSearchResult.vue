@@ -32,10 +32,10 @@
 
 <script lang="ts">
 import { PropType, toRefs } from 'vue';
-import { Channel } from '../../api_v1/api_v1';
-import { chooseImage, formatNumber } from '../../util';
-import ClickableDiv from '../ClickableDiv.vue';
-import LazyImage from '../LazyImage.vue';
+import { Channel } from 'src/api_v1/api_v1';
+import { chooseImage, formatNumber } from 'src/util';
+import ClickableDiv from 'components/ClickableDiv.vue';
+import LazyImage from 'components/LazyImage.vue';
 
 export default {
     name: 'ChannelSearchResult',

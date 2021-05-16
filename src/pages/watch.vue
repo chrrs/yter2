@@ -168,9 +168,9 @@
 <script lang="ts">
 import { computed, ref, watch } from 'vue';
 
-import Player from '../components/Player.vue';
-import InfiniteScroll from '../components/InfiniteScroll.vue';
-import LazyImage from '../components/LazyImage.vue';
+import Player from 'components/Player.vue';
+import InfiniteScroll from 'components/InfiniteScroll.vue';
+import LazyImage from 'components/LazyImage.vue';
 
 import { useRoute } from 'vue-router';
 import axios, { AxiosResponse } from 'axios';
@@ -180,10 +180,10 @@ import {
     Comment,
     Video,
     VideoFormat,
-} from '../api_v1/api_v1';
-import { chooseImage, formatNumber, formatSeconds } from '../util';
+} from 'src/api_v1/api_v1';
+import { chooseImage, formatNumber, formatSeconds } from 'src/util';
 import { useHead } from '@vueuse/head';
-import ClickableDiv from '../components/ClickableDiv.vue';
+import ClickableDiv from 'components/ClickableDiv.vue';
 
 export default {
     components: {

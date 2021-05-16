@@ -9,7 +9,7 @@
 import '@mdi/font/scss/materialdesignicons.scss';
 import '@fontsource/roboto/latin.css';
 
-import Navbar from './components/Navbar.vue';
+import Navbar from 'components/Navbar.vue';
 
 export default {
     components: {
@@ -19,7 +19,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~normalize-scss/sass/normalize';
+//noinspection CssUnknownTarget
+@import 'normalize-scss/sass/normalize';
 
 @include normalize();
 

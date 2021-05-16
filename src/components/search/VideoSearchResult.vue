@@ -38,10 +38,10 @@
 
 <script lang="ts">
 import { toRefs, PropType } from 'vue';
-import { Video } from '../../api_v1/api_v1';
-import { chooseImage, formatSeconds } from '../../util';
-import ClickableDiv from '../ClickableDiv.vue';
-import LazyImage from '../LazyImage.vue';
+import { Video } from 'src/api_v1/api_v1';
+import { chooseImage, formatSeconds } from 'src/util';
+import ClickableDiv from 'components/ClickableDiv.vue';
+import LazyImage from 'components/LazyImage.vue';
 
 export default {
     name: 'VideoSearchResult',

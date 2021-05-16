@@ -35,7 +35,7 @@
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { debounce } from '../util';
+import { debounce } from 'src/util';
 
 export default {
     name: 'Navbar',

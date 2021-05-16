@@ -12,11 +12,11 @@
 
 <script lang="ts">
 import { ref, watch } from 'vue';
-import { ApiSearchResults, SearchResult } from '../api_v1/api_v1';
+import { ApiSearchResults, SearchResult } from 'src/api_v1/api_v1';
 import axios, { AxiosResponse } from 'axios';
 import { useRoute } from 'vue-router';
-import SearchResults from '../components/search/SearchResults.vue';
-import InfiniteScroll from '../components/InfiniteScroll.vue';
+import SearchResults from 'components/search/SearchResults.vue';
+import InfiniteScroll from 'components/InfiniteScroll.vue';
 
 export default {
     components: { SearchResults, InfiniteScroll },

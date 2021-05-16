@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { PropType, toRefs, ref } from 'vue';
-import { Shelf } from '../../api_v1/api_v1';
+import { Shelf } from 'src/api_v1/api_v1';
 import VideoSearchResult from './VideoSearchResult.vue';
 import ChannelSearchResult from './ChannelSearchResult.vue';
 

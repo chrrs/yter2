@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { toRefs, PropType } from 'vue';
-import { SearchResult } from '../../api_v1/api_v1';
+import { SearchResult } from 'src/api_v1/api_v1';
 import VideoSearchResult from './VideoSearchResult.vue';
 import ChannelSearchResult from './ChannelSearchResult.vue';
 import ShelfSearchResult from './ShelfSearchResult.vue';

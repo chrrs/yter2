@@ -8,7 +8,7 @@
 import { onBeforeUnmount, onMounted, PropType, ref } from 'vue';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
-import { VideoFormat } from '../api_v1/api_v1';
+import { VideoFormat } from 'src/api_v1/api_v1';
 
 export default {
     name: 'Player',
