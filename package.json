@@ -14,8 +14,8 @@
     "dependencies": {
         "@fontsource/roboto": "^4.3.0",
         "@mdi/font": "^5.9.55",
-        "@vueuse/head": "^0.5.1",
         "@vue/server-renderer": "^3.0.11",
+        "@vueuse/head": "^0.5.1",
         "autoprefixer": "^10.2.5",
         "axios": "^0.21.1",
         "base64url": "^3.0.1",
@@ -24,26 +24,26 @@
         "express": "^4.17.1",
         "express-validator": "^6.11.1",
         "normalize-scss": "^7.0.1",
-        "plyr": "^3.6.7",
-        "postcss": "^8.2.14",
+        "plyr": "^3.6.8",
+        "postcss": "^8.2.15",
         "serve-static": "^1.14.1",
         "vue": "^3.0.5",
-        "vue-router": "4",
+        "vue-router": "^4.0.8",
         "youtube-suggest": "^1.1.2",
-        "ytdl-core": "^4.7.0",
+        "ytdl-core": "^4.8.0",
         "ytsr": "^3.5.0"
     },
     "devDependencies": {
         "@types/express": "^4.17.11",
-        "@types/node": "^15.0.2",
+        "@types/node": "^15.3.0",
         "@vitejs/plugin-vue": "^1.2.2",
         "@vue/compiler-sfc": "^3.0.5",
         "eslint": "^7.26.0",
-        "prettier": "^2.2.1",
-        "sass": "^1.32.12",
+        "prettier": "^2.3.0",
+        "sass": "^1.32.13",
         "ts-node": "^9.1.1",
         "typescript": "^4.1.3",
-        "vite": "^2.2.3",
-        "vue-tsc": "^0.0.24"
+        "vite": "^2.3.2",
+        "vue-tsc": "^0.1.2"
     }
 }
