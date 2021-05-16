@@ -50,20 +50,20 @@ export default {
                 showSuggestions.value = false;
             }, 100);
 
-        const search = (searchQuery: string = query.value) => {
-            showSuggestions.value = false;
-
+        const search = async (searchQuery: string = query.value) => {
             query.value = searchQuery;
             if (searchQuery.length === 0) {
                 return;
             }
 
-            router.push({
+            await router.push({
                 path: '/results',
                 query: {
                     search_query: searchQuery,
                 },
             });
+
+            showSuggestions.value = false;
         };
 
         const fetchSuggestions = async () => {

@@ -1,165 +1,181 @@
 <template>
-    <div class="theatre-container">
-        <div id="theatre" class="container"></div>
-    </div>
-    <div class="container watch-container">
-        <div class="main-content">
-            <div class="video-container">
-                <div class="video-placeholder" v-if="fetching || error">
-                    <p class="error-text" v-if="error">
-                        <i class="mdi mdi-alert-circle-outline"></i>
-                        Video not available
+    <div>
+        <div class="theatre-container">
+            <div id="theatre" class="container"></div>
+        </div>
+        <div class="container watch-container">
+            <div class="main-content">
+                <div class="video-container">
+                    <div class="video-placeholder" v-if="fetching || error">
+                        <p class="error-text" v-if="error">
+                            <i class="mdi mdi-alert-circle-outline"></i>
+                            Video not available
+                        </p>
+                    </div>
+                    <teleport to="#theatre" :disabled="!theatre">
+                        <Player
+                            v-if="!fetching && !error"
+                            :sources="suitableSources"
+                            :poster="chooseImage(video?.thumbnail || []).url"
+                            :storyboards="`/api/v1/video/${video?.id}/storyboards.vtt`"
+                            @theatre-mode="theatre = !theatre"
+                            class="player"
+                        />
+                    </teleport>
+                </div>
+                <div v-if="!error && !fetching" class="video-info">
+                    <h1 class="title">{{ video?.title }}</h1>
+                    <p class="subtitle">
+                        {{ video?.views?.toLocaleString('en-US') }} views •
+                        {{ formattedDate }}
                     </p>
                 </div>
-                <teleport to="#theatre" :disabled="!theatre">
-                    <Player
-                        v-if="!fetching && !error"
-                        :sources="suitableSources"
-                        :poster="chooseImage(video?.thumbnail || []).url"
-                        :storyboards="`/api/v1/video/${video?.id}/storyboards.vtt`"
-                        @theatre-mode="theatre = !theatre"
-                        class="player"
-                    />
-                </teleport>
-            </div>
-            <div v-if="!error && !fetching" class="video-info">
-                <h1 class="title">{{ video?.title }}</h1>
-                <p class="subtitle">
-                    {{ video?.views?.toLocaleString('en-US') }} views •
-                    {{ formattedDate }}
-                </p>
-            </div>
-            <div v-if="!error && !fetching" class="video-details">
-                <img
-                    :src="chooseImage(video?.author.avatar || [], 96).url"
-                    :alt="`${video?.author.name}'s profile picture`"
-                    class="author-image"
-                />
-                <div class="details">
-                    <div class="author-info">
-                        <p>
-                            <a href="#" class="author-name">
-                                {{ video?.author.name }}
-                            </a>
-                            <i
-                                v-if="video?.author.verified"
-                                class="verified mdi mdi-check-circle"
-                            ></i>
-                        </p>
-                        <p class="author-subtitle">
-                            {{ formatNumber(video?.author.subscribers || 0) }}
-                            subscribers
-                        </p>
-                    </div>
-                    <div class="video-description">
-                        {{ video?.description }}
-                    </div>
-                </div>
-            </div>
-            <div v-if="!error && !fetching" class="comments">
-                <div class="comment-count">
-                    {{ commentCount.toLocaleString('en-US') }} Comment{{
-                        commentCount === 1 ? '' : 's'
-                    }}
-                </div>
-                <div v-for="comment in comments" class="comment">
+                <div v-if="!error && !fetching" class="video-details">
                     <img
+                        :src="chooseImage(video?.author.avatar || [], 96).url"
+                        :alt="`${video?.author.name}'s profile picture`"
                         class="author-image"
-                        :src="chooseImage(comment.author.avatar, 80).url"
-                        :alt="`${comment.author.name}'s profile picture`"
                     />
-                    <div class="content">
-                        <p class="header">
-                            <a
-                                href="#"
-                                class="author-name"
-                                :class="{
-                                    'video-author':
-                                        comment.author.id === video?.author?.id,
-                                }"
-                            >
-                                {{ comment.author.name }}
-                            </a>
-                            <span class="timestamp">{{ comment.date }}</span>
-                        </p>
-                        <p class="comment-body">
-                            {{ comment.text }}
-                        </p>
-                        <div class="likes">
-                            <div class="like">
-                                <i class="mdi mdi-thumb-up"></i>
-                                <span v-if="comment.likes !== 0" class="amount">
-                                    {{ comment.likes.toLocaleString('en-US') }}
-                                </span>
-                            </div>
-                            <i class="mdi mdi-thumb-down"></i>
-                            <div v-if="comment.heart" class="creator-heart">
-                                <LazyImage
-                                    :src="
-                                        chooseImage(
-                                            video?.author?.avatar || [],
-                                            32
-                                        ).url
-                                    "
-                                    :alt="`${video?.author?.name}'s profile picture`"
-                                />
-                                <i class="heart mdi mdi-heart"></i>
-                            </div>
-                        </div>
-                        <div v-if="comment.replies !== 0" class="replies">
-                            <a href="#" class="expand">
-                                <i class="mdi mdi-chevron-down"></i>
-                                View
+                    <div class="details">
+                        <div class="author-info">
+                            <p>
+                                <a href="#" class="author-name">
+                                    {{ video?.author.name }}
+                                </a>
+                                <i
+                                    v-if="video?.author.verified"
+                                    class="verified mdi mdi-check-circle"
+                                ></i>
+                            </p>
+                            <p class="author-subtitle">
                                 {{
-                                    comment.replies === 1
-                                        ? 'reply'
-                                        : `${comment.replies} replies`
+                                    formatNumber(video?.author.subscribers || 0)
                                 }}
-                            </a>
+                                subscribers
+                            </p>
+                        </div>
+                        <div class="video-description">
+                            {{ video?.description }}
                         </div>
                     </div>
                 </div>
-                <InfiniteScroll
-                    v-if="commentContinuation"
-                    class="spinner"
-                    :disabled="fetchingComments"
-                    @loadMore="fetchComments()"
-                ></InfiniteScroll>
-            </div>
-        </div>
-        <div class="sidebar">
-            <div v-if="!fetching && !error" class="related-videos">
-                <ClickableDiv
-                    v-for="relatedVideo in related"
-                    class="related-video"
-                    @click=""
-                    :to="`/watch?v=${relatedVideo.id}`"
-                >
-                    <div class="thumbnail">
-                        <LazyImage
-                            :src="chooseImage(relatedVideo.thumbnail, 320).url"
-                            alt="Video thumbnail"
+                <div v-if="!error && !fetching" class="comments">
+                    <div class="comment-count">
+                        {{ commentCount.toLocaleString('en-US') }} Comment{{
+                            commentCount === 1 ? '' : 's'
+                        }}
+                    </div>
+                    <div v-for="comment in comments" class="comment">
+                        <img
+                            class="author-image"
+                            :src="chooseImage(comment.author.avatar, 80).url"
+                            :alt="`${comment.author.name}'s profile picture`"
                         />
-                        <span class="video-length">
-                            {{ formatSeconds(relatedVideo.lengthSeconds) }}
-                        </span>
+                        <div class="content">
+                            <p class="header">
+                                <a
+                                    href="#"
+                                    class="author-name"
+                                    :class="{
+                                        'video-author':
+                                            comment.author.id ===
+                                            video?.author?.id,
+                                    }"
+                                >
+                                    {{ comment.author.name }}
+                                </a>
+                                <span class="timestamp">{{
+                                    comment.date
+                                }}</span>
+                            </p>
+                            <p class="comment-body">
+                                {{ comment.text }}
+                            </p>
+                            <div class="likes">
+                                <div class="like">
+                                    <i class="mdi mdi-thumb-up"></i>
+                                    <span
+                                        v-if="comment.likes !== 0"
+                                        class="amount"
+                                    >
+                                        {{
+                                            comment.likes.toLocaleString(
+                                                'en-US'
+                                            )
+                                        }}
+                                    </span>
+                                </div>
+                                <i class="mdi mdi-thumb-down"></i>
+                                <div v-if="comment.heart" class="creator-heart">
+                                    <LazyImage
+                                        :src="
+                                            chooseImage(
+                                                video?.author?.avatar || [],
+                                                32
+                                            ).url
+                                        "
+                                        :alt="`${video?.author?.name}'s profile picture`"
+                                    />
+                                    <i class="heart mdi mdi-heart"></i>
+                                </div>
+                            </div>
+                            <div v-if="comment.replies !== 0" class="replies">
+                                <a href="#" class="expand">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                    View
+                                    {{
+                                        comment.replies === 1
+                                            ? 'reply'
+                                            : `${comment.replies} replies`
+                                    }}
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="video-info">
-                        <p class="title">{{ relatedVideo.title }}</p>
-                        <p class="author">
-                            <a href="#">{{ relatedVideo.author.name }}</a>
-                            <i
-                                v-if="relatedVideo.author.verified"
-                                class="verified mdi mdi-check-circle"
-                            ></i>
-                        </p>
-                        <p class="details">
-                            {{ relatedVideo.views.toLocaleString('en-US') }}
-                            views •
-                            {{ relatedVideo.date }}
-                        </p>
-                    </div>
-                </ClickableDiv>
+                    <InfiniteScroll
+                        v-if="commentContinuation"
+                        class="spinner"
+                        :disabled="fetchingComments"
+                        @loadMore="fetchComments()"
+                    ></InfiniteScroll>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div v-if="!fetching && !error" class="related-videos">
+                    <ClickableDiv
+                        v-for="relatedVideo in related"
+                        class="related-video"
+                        @click=""
+                        :to="`/watch?v=${relatedVideo.id}`"
+                    >
+                        <div class="thumbnail">
+                            <LazyImage
+                                :src="
+                                    chooseImage(relatedVideo.thumbnail, 320).url
+                                "
+                                alt="Video thumbnail"
+                            />
+                            <span class="video-length">
+                                {{ formatSeconds(relatedVideo.lengthSeconds) }}
+                            </span>
+                        </div>
+                        <div class="video-info">
+                            <p class="title">{{ relatedVideo.title }}</p>
+                            <p class="author">
+                                <a href="#">{{ relatedVideo.author.name }}</a>
+                                <i
+                                    v-if="relatedVideo.author.verified"
+                                    class="verified mdi mdi-check-circle"
+                                ></i>
+                            </p>
+                            <p class="details">
+                                {{ relatedVideo.views.toLocaleString('en-US') }}
+                                views •
+                                {{ relatedVideo.date }}
+                            </p>
+                        </div>
+                    </ClickableDiv>
+                </div>
             </div>
         </div>
     </div>
