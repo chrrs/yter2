@@ -529,6 +529,7 @@ export default {
                         margin: 0;
 
                         font-size: 0.875rem;
+                        white-space: pre-line;
                     }
 
                     & > .likes {
